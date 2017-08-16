@@ -27,7 +27,8 @@
                 <button id="btnBack" type="button"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary">
                     <i class="material-icons"
-                       title="<?php echo _t('authenticator', 'Volver a iniciar sesión'); ?>"><?php echo $icons->getIconBack()->getIcon(); ?></i>
+                       title="<?php echo _t('authenticator', 'Volver a iniciar sesión'); ?>"><?php /** @var \Theme\Icons $icons */
+                        echo $icons->getIconBack()->getIcon(); ?></i>
                     <?php echo _t('authenticator', 'Volver'); ?>
                 </button>
 

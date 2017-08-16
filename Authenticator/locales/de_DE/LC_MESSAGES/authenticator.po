@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sysPass\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-16 12:49+0100\n"
-"PO-Revision-Date: 2017-08-16 12:49+0100\n"
+"POT-Creation-Date: 2017-08-16 23:35+0100\n"
+"PO-Revision-Date: 2017-08-16 23:35+0100\n"
 "Last-Translator: nuxsmin <nuxsmin@syspass.org>\n"
 "Language-Team:  <language@syspass.org>\n"
 "Language: de_DE\n"
@@ -16,49 +16,63 @@ msgstr ""
 "X-Poedit-KeywordsList: _t:2\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: ../../../ActionController.class.php:116
-#: ../../../ActionController.class.php:242
-msgid "Código incorrecto"
-msgstr "Falscher Code"
-
-#: ../../../ActionController.class.php:121
+#: ../../../ActionController.class.php:125
 msgid "Ey, esto es una DEMO!!"
 msgstr "Hey, dies ist eine DEMO!!"
 
-#: ../../../ActionController.class.php:139
+#: ../../../ActionController.class.php:144
 msgid "2FA Habilitado"
-msgstr ""
+msgstr "2FA Enabled"
 
-#: ../../../ActionController.class.php:142
-#: ../../../ActionController.class.php:211
+#: ../../../ActionController.class.php:147
 msgid "2FA Deshabilitado"
-msgstr ""
+msgstr "2FA Disabled"
 
-#: ../../../ActionController.class.php:148
+#: ../../../ActionController.class.php:153
 msgid "Preferencias actualizadas"
 msgstr "Einstellungen aktualisiert"
 
-#: ../../../ActionController.class.php:210
-#: ../../../ActionController.class.php:236
+#: ../../../ActionController.class.php:218
+msgid "Código incorrecto"
+msgstr "Falscher Code"
+
+#: ../../../ActionController.class.php:264
+msgid "Código de recuperación utilizado"
+msgstr "Recovery code used"
+
+#: ../../../ActionController.class.php:269
+#: ../../../ActionController.class.php:394
+msgid "Preferencias"
+msgstr "Preferences"
+
+#: ../../../ActionController.class.php:281
+msgid "Email de recuperación enviado"
+msgstr "Recovery email has been sent"
+
+#: ../../../ActionController.class.php:308
 msgid "Código correcto"
 msgstr "Code bestätigt"
 
-#: ../../../ActionController.class.php:221
-msgid "Email de recuperación enviado"
-msgstr ""
-
-#: ../../../ActionController.class.php:289
+#: ../../../ActionController.class.php:330
 msgid "Recuperación de Código 2FA"
-msgstr ""
+msgstr "2FA Code Recovery"
 
-#: ../../../ActionController.class.php:290
+#: ../../../ActionController.class.php:331
 msgid "Se ha solicitado un código de recuperación para 2FA."
-msgstr ""
+msgstr "A 2FA recovery code has been requested."
 
-#: ../../../ActionController.class.php:292
+#: ../../../ActionController.class.php:333
 #, php-format
 msgid "El código de recuperación es: %s"
-msgstr ""
+msgstr "The recovery code is: %s"
+
+#: ../../../ActionController.class.php:389
+msgid "Códigos de recuperación visualizados"
+msgstr "Recovery codes displayed"
+
+#: ../../../ActionController.class.php:402
+msgid "Códigos de recuperación agotados"
+msgstr "There aren't any recovery codes available"
 
 #: ../../../LoginController.class.php:123
 #, fuzzy
@@ -82,7 +96,7 @@ msgid "Seguridad"
 msgstr "Sicherheit"
 
 #: ../../../themes/material-blue/views/main/login-2fa.inc:7
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:40
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:44
 msgid "Autentificación en 2 pasos"
 msgstr "Zwei-Faktor Authentifizierung"
 
@@ -92,53 +106,53 @@ msgstr "Code eingeben"
 
 #: ../../../themes/material-blue/views/main/login-2fa.inc:17
 msgid "Olvidé mi código"
-msgstr ""
+msgstr "Forgot my code"
 
 #: ../../../themes/material-blue/views/main/login-2fa.inc:30
 msgid "Volver a iniciar sesión"
 msgstr "Zurück zur Anmeldung"
 
-#: ../../../themes/material-blue/views/main/login-2fa.inc:31
+#: ../../../themes/material-blue/views/main/login-2fa.inc:32
 msgid "Volver"
 msgstr "Zurück"
 
-#: ../../../themes/material-blue/views/main/login-2fa.inc:35
+#: ../../../themes/material-blue/views/main/login-2fa.inc:36
 msgid "Acceder"
 msgstr "Anmeldung"
 
-#: ../../../themes/material-blue/views/main/login-2fa.inc:37
+#: ../../../themes/material-blue/views/main/login-2fa.inc:38
 msgid "Solicitar"
 msgstr "Anfrage"
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:29
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:33
 msgid "Autentificación"
 msgstr "Authentifizierung"
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:45
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:49
 msgid ""
 "Habilita la autentificación en 2 pasos que requiere de la introducción de un "
 "token generado por una aplicación como Google Authenticator."
 msgstr "Aktiviert Zwei-Faktor-Authentifizierung"
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:49
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:53
 msgid ""
 "Escanee el código QR proporcionado y a continuación introduzca la clave de 6 "
 "dígitos."
 msgstr "Scanne den angegebenen QR-Code und gib den sechs stelligen Code ein."
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:58
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:62
 msgid "Activar"
 msgstr "Aktivieren"
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:64
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:68
 msgid "Error al obtener el código QR. Inténtelo de nuevo"
 msgstr "Fehler beim Abrufen des QR-Codes. Bitte erneut versuchen."
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:74
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:77
 msgid "Código"
 msgstr "Code"
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:80
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:83
 msgid ""
 "Una vez activada, sólo es posible acceder si se dispone del dispositivo "
 "generador de códigos asociado."
@@ -146,11 +160,19 @@ msgstr ""
 "Sobald aktiviert, kannst du dich nur mit dem Codegenerator verbundenen Gerät "
 "anmelden."
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:84
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:87
 #, fuzzy
 msgid "Días Caducidad"
 msgstr "Änderungsdatum"
 
-#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:91
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:94
 msgid "Días"
 msgstr "Tage"
+
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:101
+msgid "Códigos Recuperación"
+msgstr "Recovery Codes"
+
+#: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:103
+msgid "Ver códigos"
+msgstr "Display codes"

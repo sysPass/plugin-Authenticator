@@ -71,8 +71,7 @@ use Plugins\Authenticator\ActionController;
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input id="security_pin" name="security_pin" type="text"
-                                   pattern="[0-9]{6}" class="mdl-textfield__input mdl-color-text--indigo-400"
-                                   maxlength="6"
+                                   pattern="([0-9]{6}|[0-9a-f]{20})" class="mdl-textfield__input mdl-color-text--indigo-400" maxlength="20"
                                    required/>
                             <label class="mdl-textfield__label"
                                    for="security_pin"><?php echo _t('authenticator', 'Código'); ?></label>

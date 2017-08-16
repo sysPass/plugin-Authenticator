@@ -75,9 +75,13 @@ sysPass.Plugin.Authenticator = function (Common) {
 
             Common.appRequests().getActionCall(opts, function (json) {
                 if (json.status === 0) {
+                    log.info(json.data);
+
                     var $results = $($obj.data("dst-id"));
                     $results.find(".list-wrap").html(Common.appTheme().html.getList(json.data, "vpn_key"));
                     $results.show("slow");
+                } else {
+                    Common.msg.out(json);
                 }
             });
         }
