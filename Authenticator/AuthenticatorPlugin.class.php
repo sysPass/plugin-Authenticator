@@ -70,13 +70,13 @@ class AuthenticatorPlugin extends PluginBase
      * Evento de actualización
      *
      * @param string $event Nombre del evento
-     * @param mixed  $object
+     * @param mixed $object
      * @throws \SP\Core\Exceptions\FileNotFoundException
      * @throws \SP\Core\Exceptions\SPException
      */
     public function updateEvent($event, $object)
     {
-        switch ($event){
+        switch ($event) {
             case 'user.preferences':
                 $Controller = new PreferencesController($object, $this);
                 $Controller->getSecurityTab();
@@ -168,5 +168,42 @@ class AuthenticatorPlugin extends PluginBase
     public function getData()
     {
         return (array)parent::getData();
+    }
+
+    /**
+     * Devolver los datos de un Id
+     *
+     * @param $id
+     * @return AuthenticatorData|null
+     */
+    public function getDataForId($id)
+    {
+        return isset($this->data[$id]) ? $this->data[$id] : null;
+    }
+
+    /**
+     * Establecer los datos de un Id
+     *
+     * @param $id
+     * @param AuthenticatorData $AuthenticatorData
+     * @return AuthenticatorPlugin
+     */
+    public function setDataForId($id, AuthenticatorData $AuthenticatorData)
+    {
+        $this->data[$id] = $AuthenticatorData;
+
+        return $this;
+    }
+
+    /**
+     * Eliminar los datos de un Id
+     *
+     * @param $id
+     */
+    public function deleteDataForId($id)
+    {
+        if (isset($this->data[$id])) {
+            unset($this->data[$id]);
+        }
     }
 }

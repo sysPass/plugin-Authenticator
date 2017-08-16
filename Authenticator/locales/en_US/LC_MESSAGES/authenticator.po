@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Authenticator\n"
-"POT-Creation-Date: 2017-08-16 02:43+0100\n"
-"PO-Revision-Date: 2017-08-16 02:43+0100\n"
+"POT-Creation-Date: 2017-08-16 12:49+0100\n"
+"PO-Revision-Date: 2017-08-16 12:50+0100\n"
 "Last-Translator: nuxsmin <nuxsmin@syspass.org>\n"
 "Language-Team: nuxsmin@syspass.org\n"
 "Language: en_US\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: ../../..\n"
 
 #: ../../../ActionController.class.php:116
-#: ../../../ActionController.class.php:255
+#: ../../../ActionController.class.php:242
 msgid "Código incorrecto"
 msgstr "Wrong code"
 
@@ -25,28 +25,37 @@ msgstr "Wrong code"
 msgid "Ey, esto es una DEMO!!"
 msgstr "Ey, this is a DEMO!!"
 
-#: ../../../ActionController.class.php:155
+#: ../../../ActionController.class.php:139
+msgid "2FA Habilitado"
+msgstr "2FA Enabled"
+
+#: ../../../ActionController.class.php:142
+#: ../../../ActionController.class.php:211
+msgid "2FA Deshabilitado"
+msgstr "2FA Disabled"
+
+#: ../../../ActionController.class.php:148
 msgid "Preferencias actualizadas"
 msgstr "Preferences updated"
 
-#: ../../../ActionController.class.php:224
-#: ../../../ActionController.class.php:249
+#: ../../../ActionController.class.php:210
+#: ../../../ActionController.class.php:236
 msgid "Código correcto"
 msgstr "Correct code"
 
-#: ../../../ActionController.class.php:234
+#: ../../../ActionController.class.php:221
 msgid "Email de recuperación enviado"
 msgstr "Recovery email has been sent"
 
-#: ../../../ActionController.class.php:277
+#: ../../../ActionController.class.php:289
 msgid "Recuperación de Código 2FA"
 msgstr "2FA Code Recovery"
 
-#: ../../../ActionController.class.php:278
+#: ../../../ActionController.class.php:290
 msgid "Se ha solicitado un código de recuperación para 2FA."
 msgstr "A 2FA recovery code has been requested."
 
-#: ../../../ActionController.class.php:280
+#: ../../../ActionController.class.php:292
 #, php-format
 msgid "El código de recuperación es: %s"
 msgstr "The recovery code is: %s"

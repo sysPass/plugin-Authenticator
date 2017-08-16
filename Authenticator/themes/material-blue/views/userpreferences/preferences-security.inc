@@ -20,7 +20,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with sysPass-Authenticator. If not, see <http://www.gnu.org/licenses/>.
- */ /** @var $icons \Theme\Icons */ ?>
+ */
+
+use Plugins\Authenticator\ActionController;
+
+/** @var $icons \Theme\Icons */ ?>
 
 <!-- Start Tab - Security -->
 <div id="tabs-<?php echo $security_tabIndex; ?>" class="mdl-tabs__panel">
@@ -92,6 +96,22 @@
                         </div>
                     </td>
                 </tr>
+                <?php if ($chk2FAEnabled): ?>
+                    <tr>
+                        <td class="descField">
+                            <?php echo _t('authenticator', 'Códigos Recuperación'); ?>
+                            <i class="btn-action material-icons"
+                               title="<?php echo _t('authenticator', 'Ver códigos'); ?>"
+                               data-onclick="twofa/viewRecoveryCodes"
+                               data-plugin="Authenticator"
+                               data-action-id="<?php echo ActionController::ACTION_TWOFA_SHOWCODES; ?>"
+                               data-dst-id="#recovery-codes">remove_red_eye</i>
+                        </td>
+                        <td class="valField" id="recovery-codes" style="display: none;">
+                            <div class="list-wrap"></div>
+                        </td>
+                    </tr>
+                <?php endif; ?>
             </table>
 
             <input type="hidden" name="itemId" value="<?php echo $userId; ?>"/>
@@ -103,7 +123,7 @@
         <div class="tab-actions">
             <ul>
                 <li>
-                    <button form="frmSecurity" type="submit"
+                    <button form="frmSecurity"
                             class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored <?php echo $icons->getIconSave()->getClassButton(); ?>"
                             title="<?php echo $icons->getIconSave()->getTitle(); ?>">
                         <i class="material-icons"><?php echo $icons->getIconSave()->getIcon(); ?></i>

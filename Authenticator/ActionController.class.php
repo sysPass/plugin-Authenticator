@@ -29,12 +29,12 @@ use SP\Controller\ItemControllerInterface;
 use SP\Controller\RequestControllerTrait;
 use SP\Core\Exceptions\SPException;
 use SP\Core\Messages\LogMessage;
+use SP\Core\Messages\NoticeMessage;
 use SP\Core\Plugin\PluginDataStore;
 use SP\Core\Session as CoreSession;
-use SP\DataModel\PluginData;
 use SP\Http\Request;
 use SP\Log\Email;
-use SP\Mgmt\Plugins\Plugin;
+use SP\Mgmt\Notices\Notice;
 use SP\Util\ArrayUtil;
 use SP\Util\Checks;
 use SP\Util\Json;
@@ -49,6 +49,7 @@ class ActionController implements ItemControllerInterface
 {
     const ACTION_TWOFA_SAVE = 1;
     const ACTION_TWOFA_CHECKCODE = 2;
+    const ACTION_TWOFA_SHOWCODES = 3;
 
     use RequestControllerTrait;
 
@@ -87,6 +88,9 @@ class ActionController implements ItemControllerInterface
                 case ActionController::ACTION_TWOFA_CHECKCODE:
                     $this->checkCode();
                     break;
+                case ActionController::ACTION_TWOFA_SHOWCODES:
+                    $this->showRecoveryCodes();
+                    break;
                 default:
                     $this->invalidAction();
             }
@@ -112,17 +116,15 @@ class ActionController implements ItemControllerInterface
 
         $twoFa = new Authenticator($this->itemId, CoreSession::getUserData()->getUserLogin(), $AuthenticatorData->getIV());
 
-        if (!$twoFa->verifyKey($pin)) {
-            $this->JsonResponse->setDescription(_t('authenticator', 'Código incorrecto'));
-            Json::returnJson($this->JsonResponse);
+        if (!$twoFa->verifyKey($pin)
+            || (strlen($pin) === 20 && !$this->useRecoveryCode($AuthenticatorData, $pin))) {
+            $this->authResponseError();
         }
 
         if (Checks::demoIsEnabled()) {
             $this->JsonResponse->setDescription(_t('authenticator', 'Ey, esto es una DEMO!!'));
             Json::returnJson($this->JsonResponse);
         }
-
-        $data = $this->Plugin->getData();
 
         if ($twofa_enabled) {
             /** @var AuthenticatorData $AuthenticatorData */
@@ -137,22 +139,33 @@ class ActionController implements ItemControllerInterface
                 debugLog($e->getMessage());
             }
 
-            $data[$this->itemId] = $AuthenticatorData;
+            $this->Plugin->setDataForId($this->itemId, $AuthenticatorData);
+            $this->JsonResponse->addMessage(_t('authenticator', '2FA Habilitado'));
         } elseif (!$twofa_enabled) {
-            unset($data[$this->itemId]);
+            $this->Plugin->deleteDataForId($this->itemId);
+            $this->JsonResponse->addMessage(_t('authenticator', '2FA Deshabilitado'));
         }
 
         $this->savePluginUserData($AuthenticatorData);
 
-        $PluginData = new PluginData();
-        $PluginData->setPluginName($this->Plugin->getName());
-        $PluginData->setPluginEnabled(1);
-        $PluginData->setPluginData(serialize($data));
-
-        Plugin::getItem($PluginData)->update();
-
         $this->JsonResponse->setStatus(0);
         $this->JsonResponse->setDescription(_t('authenticator', 'Preferencias actualizadas'));
+
+        Json::returnJson($this->JsonResponse);
+    }
+
+    /**
+     * Autentificación incorrecta
+     * @param bool $isAuth
+     */
+    protected function authResponseError($isAuth = false)
+    {
+        if ($isAuth === true) {
+            Session::setTwoFApass(false);
+            CoreSession::setAuthCompleted(false);
+        }
+
+        $this->JsonResponse->setDescription(_t('authenticator', 'Código incorrecto'));
 
         Json::returnJson($this->JsonResponse);
     }
@@ -184,16 +197,9 @@ class ActionController implements ItemControllerInterface
      */
     protected function savePluginUserData(AuthenticatorData $AuthenticatorData)
     {
-        $data = $this->Plugin->getData();
-        $data[$AuthenticatorData->getUserId()] = $AuthenticatorData;
-
-        $PluginData = new PluginData();
-        $PluginData->setPluginName($this->Plugin->getName());
-        $PluginData->setPluginEnabled(1);
-        $PluginData->setPluginData(serialize($data));
-
         try {
-            Plugin::getItem($PluginData)->update();
+            $this->Plugin->setDataForId($AuthenticatorData->getUserId(), $AuthenticatorData);
+            PluginDataStore::save($this->Plugin);
         } catch (SPException $e) {
             return false;
         }
@@ -215,16 +221,30 @@ class ActionController implements ItemControllerInterface
 
         // Buscar al usuario en los datos del plugin
         /** @var AuthenticatorData $AuthenticatorData */
-        $AuthenticatorData = ArrayUtil::searchInObject($this->Plugin->getData(), 'userId', $userId, new AuthenticatorData());
+        $AuthenticatorData = ArrayUtil::searchInObject($this->Plugin->getData(), 'userId', $userId);
+
+        if ($AuthenticatorData === null) {
+            $this->authResponseError();
+        }
 
         if (strlen($pin) === 20 && $this->useRecoveryCode($AuthenticatorData, $pin)) {
             Session::setTwoFApass(true);
             CoreSession::setAuthCompleted(true);
 
-            $this->JsonResponse->setDescription(_t('authenticator', 'Código correcto'));
-            $this->JsonResponse->setStatus(0);
+            $NoticeData = Notice::getItem()->getItemData();
+            $NoticeData->setNoticeComponent($this->Plugin->getName());
+            $NoticeData->setNoticeUserId($AuthenticatorData->getUserId());
+            $NoticeData->setNoticeType(_t('authenticator', 'Aviso Caducidad'));
 
-            Json::returnJson($this->JsonResponse);
+            $Message = new NoticeMessage();
+            $Message->addDescription(_t('authenticator', '2FA Deshabilitado'));
+            $NoticeData->setNoticeDescription($Message);
+
+            Notice::getItem($NoticeData)->add();
+
+            $this->JsonResponse->addMessage(_t('authenticator', '2FA Deshabilitado'));
+
+            $this->authResponseOk();
         }
 
         if ($codeReset && $this->sendResetEmail($AuthenticatorData)) {
@@ -239,21 +259,48 @@ class ActionController implements ItemControllerInterface
 
         $TwoFa = new Authenticator($userId, CoreSession::getUserData()->getUserLogin(), $AuthenticatorData->getIV());
 
-        if ($userId
-            && $pin
-            && $TwoFa->verifyKey($pin)
-        ) {
-            Session::setTwoFApass(true);
-            CoreSession::setAuthCompleted(true);
-
-            $this->JsonResponse->setDescription(_t('authenticator', 'Código correcto'));
-            $this->JsonResponse->setStatus(0);
+        if ($pin && $TwoFa->verifyKey($pin)) {
+            $this->authResponseOk();
         } else {
-            Session::setTwoFApass(false);
-            CoreSession::setAuthCompleted(false);
-
-            $this->JsonResponse->setDescription(_t('authenticator', 'Código incorrecto'));
+            $this->authResponseError();
         }
+    }
+
+    /**
+     * Usar un código de recuperación y deshabilitar 2FA
+     *
+     * @param AuthenticatorData $AuthenticatorData
+     * @param                   $code
+     * @return bool|string
+     */
+    protected function useRecoveryCode(AuthenticatorData $AuthenticatorData, $code)
+    {
+        $codes = $AuthenticatorData->getRecoveryCodes();
+
+        if ($key = array_search($code, $codes) !== false) {
+
+            unset($codes[$key]);
+
+            $AuthenticatorData->setTwofaEnabled(false);
+            $AuthenticatorData->setRecoveryCodes($codes);
+            $AuthenticatorData->setLastRecoveryTime(time());
+
+            return $this->savePluginUserData($AuthenticatorData);
+        }
+
+        return false;
+    }
+
+    /**
+     * Autentificación correcta
+     */
+    protected function authResponseOk()
+    {
+        Session::setTwoFApass(true);
+        CoreSession::setAuthCompleted(true);
+
+        $this->JsonResponse->setDescription(_t('authenticator', 'Código correcto'));
+        $this->JsonResponse->setStatus(0);
 
         Json::returnJson($this->JsonResponse);
     }
@@ -323,27 +370,15 @@ class ActionController implements ItemControllerInterface
     }
 
     /**
-     * Usar un código de recuperación y deshabilitar 2FA
-     *
-     * @param AuthenticatorData $AuthenticatorData
-     * @param                   $code
-     * @return bool|string
+     * Mostrar códigos de recuperación
      */
-    protected function useRecoveryCode(AuthenticatorData $AuthenticatorData, $code)
+    protected function showRecoveryCodes()
     {
-        $codes = $AuthenticatorData->getRecoveryCodes();
+        $AuthenticatorData = Session::getUserData();
 
-        if ($key = array_search($code, $codes) !== false) {
+        $this->JsonResponse->setData($AuthenticatorData->getRecoveryCodes());
+        $this->JsonResponse->setStatus(0);
 
-            unset($codes[$key]);
-
-            $AuthenticatorData->setTwofaEnabled(false);
-            $AuthenticatorData->setRecoveryCodes($codes);
-            $AuthenticatorData->setLastRecoveryTime(time());
-
-            return $this->savePluginUserData($AuthenticatorData);
-        }
-
-        return false;
+        Json::returnJson($this->JsonResponse);
     }
 }

@@ -62,6 +62,24 @@ sysPass.Plugin.Authenticator = function (Common) {
                     });
                 }
             });
+        },
+        viewRecoveryCodes: function ($obj) {
+            log.info("Authenticator:twofa:viewRecoveryCodes");
+
+            var opts = Common.appRequests().getRequestOpts();
+            opts.url = base + "/ajax/ajax_actions.php";
+            opts.data = {
+                actionId: $obj.data("action-id"),
+                sk: Common.sk.get()
+            };
+
+            Common.appRequests().getActionCall(opts, function (json) {
+                if (json.status === 0) {
+                    var $results = $($obj.data("dst-id"));
+                    $results.find(".list-wrap").html(Common.appTheme().html.getList(json.data, "vpn_key"));
+                    $results.show("slow");
+                }
+            });
         }
     };
 
