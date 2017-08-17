@@ -427,7 +427,7 @@ class ActionController implements ItemControllerInterface
             $out->remoteVersion = $data->{$pluginName}->version;
             $out->localVersion = implode('.', $this->Plugin->getVersion());
 
-            if (version_compare($out->remoteVersion, $out->localVersion) === 0) {
+            if (version_compare($out->remoteVersion, $out->localVersion) === 1) {
                 $this->JsonResponse->setData($out);
             }
 
