@@ -38,7 +38,7 @@ sysPass.Plugin.Authenticator = function (Common) {
             Common.appRequests().getActionCall(opts, function (json) {
                 Common.msg.out(json);
 
-                if (json.status == 0) {
+                if (json.status === 0) {
                     setTimeout(function () {
                         Common.redirect("index.php");
                     }, 1000);
@@ -75,8 +75,6 @@ sysPass.Plugin.Authenticator = function (Common) {
 
             Common.appRequests().getActionCall(opts, function (json) {
                 if (json.status === 0) {
-                    log.info(json.data);
-
                     var $results = $($obj.data("dst-id"));
                     $results.find(".list-wrap").html(Common.appTheme().html.getList(json.data, "vpn_key"));
                     $results.show("slow");
@@ -87,6 +85,24 @@ sysPass.Plugin.Authenticator = function (Common) {
         }
     };
 
+    /**
+     * Comprobar la versión más reciente
+     */
+    var checkVersion = function () {
+        log.info("Authenticator:checkVersion");
+
+        var opts = Common.appRequests().getRequestOpts();
+        opts.url = base + "/ajax/ajax_checkVersion.php";
+        opts.method = "get";
+        opts.useLoading = false;
+
+        return Common.appRequests().getActionCall(opts, function (json) {
+            if (json.status === 0) {
+                return json.data[0].Authenticator.version;
+            }
+        });
+    };
+
     var init = function () {
 
     };
@@ -94,6 +110,7 @@ sysPass.Plugin.Authenticator = function (Common) {
     init();
 
     return {
-        twofa: twofa
+        twofa: twofa,
+        checkVersion: checkVersion
     };
 };
