@@ -130,7 +130,7 @@ class AuthenticatorPlugin extends PluginBase
      */
     public function getVersion()
     {
-        return [1, 1];
+        return [1, 1, 0];
     }
 
     /**

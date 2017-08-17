@@ -32,6 +32,7 @@ use SP\Core\Messages\LogMessage;
 use SP\Core\Messages\NoticeMessage;
 use SP\Core\Plugin\PluginDataStore;
 use SP\Core\Session as CoreSession;
+use SP\Core\SessionUtil;
 use SP\Http\Request;
 use SP\Log\Email;
 use SP\Mgmt\Notices\Notice;
@@ -50,6 +51,7 @@ class ActionController implements ItemControllerInterface
     const ACTION_TWOFA_SAVE = 1;
     const ACTION_TWOFA_CHECKCODE = 2;
     const ACTION_TWOFA_SHOWCODES = 3;
+    const ACTION_PLUGIN_CHECKVERSION = 100;
 
     use RequestControllerTrait;
 
@@ -90,6 +92,9 @@ class ActionController implements ItemControllerInterface
                     break;
                 case self::ACTION_TWOFA_SHOWCODES:
                     $this->showRecoveryCodes();
+                    break;
+                case self::ACTION_PLUGIN_CHECKVERSION:
+                    $this->checkVersion();
                     break;
                 default:
                     $this->invalidAction();
@@ -404,5 +409,44 @@ class ActionController implements ItemControllerInterface
         }
 
         Json::returnJson($this->JsonResponse);
+    }
+
+    /**
+     * Comprobar la versión del plugin
+     *
+     * @throws \SP\Core\Exceptions\SPException
+     */
+    protected function checkVersion()
+    {
+        $data = json_decode(Util::getDataFromUrl(AuthenticatorPlugin::VERSION_URL));
+        $pluginName = $this->Plugin->getName();
+
+        if (isset($data->{$pluginName})) {
+            $out = new \stdClass();
+            $out->plugin = $pluginName;
+            $out->remoteVersion = $data->{$pluginName}->version;
+            $out->localVersion = implode('.', $this->Plugin->getVersion());
+
+            if (version_compare($out->remoteVersion, $out->localVersion) === 0) {
+                $this->JsonResponse->setData($out);
+            }
+
+            $this->JsonResponse->setStatus(0);
+
+            Json::returnJson($this->JsonResponse);
+        }
+    }
+
+    /**
+     * Comprobaciones antes de realizar una acción
+     */
+    protected function preActionChecks()
+    {
+        if (!$this->actionId
+            || ($this->actionId !== self::ACTION_PLUGIN_CHECKVERSION
+                && (!$this->sk || !SessionUtil::checkSessionKey($this->sk)))
+        ) {
+            $this->invalidAction();
+        }
     }
 }

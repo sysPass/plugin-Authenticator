@@ -92,15 +92,14 @@ sysPass.Plugin.Authenticator = function (Common) {
         log.info("Authenticator:checkVersion");
 
         var opts = Common.appRequests().getRequestOpts();
-        opts.url = base + "/ajax/ajax_checkVersion.php";
-        opts.method = "get";
+        opts.url = base + "/ajax/ajax_actions.php";
         opts.useLoading = false;
+        opts.data = {
+            actionId: 100,
+            sk: Common.sk.get()
+        };
 
-        return Common.appRequests().getActionCall(opts, function (json) {
-            if (json.status === 0) {
-                return json.data[0].Authenticator.version;
-            }
-        });
+        return Common.appRequests().getActionCall(opts);
     };
 
     var init = function () {
