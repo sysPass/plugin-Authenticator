@@ -146,13 +146,14 @@ class ActionController implements ItemControllerInterface
 
             $this->Plugin->setDataForId($this->itemId, $AuthenticatorData);
 
-            $this->JsonResponse->addMessage(_t('authenticator', '2FA Habilitado'));
+            if ($this->savePluginUserData($AuthenticatorData)) {
+                $this->JsonResponse->addMessage(_t('authenticator', '2FA Habilitado'));
+            }
         } elseif (!$twofa_enabled) {
-            $this->Plugin->deleteDataForId($this->itemId);
-            $this->JsonResponse->addMessage(_t('authenticator', '2FA Deshabilitado'));
+            if ($this->deletePluginUserData($this->itemId)) {
+                $this->JsonResponse->addMessage(_t('authenticator', '2FA Deshabilitado'));
+            }
         }
-
-        $this->savePluginUserData($AuthenticatorData);
 
         $this->JsonResponse->setStatus(0);
         $this->JsonResponse->setDescription(_t('authenticator', 'Preferencias actualizadas'));
@@ -192,7 +193,7 @@ class ActionController implements ItemControllerInterface
     }
 
     /**
-     * Guardar datos del Plugin
+     * Guardar datos del Plugin de un usuario
      *
      * @param AuthenticatorData $AuthenticatorData
      * @return bool
@@ -242,6 +243,26 @@ class ActionController implements ItemControllerInterface
         } while ($i <= 10);
 
         return $codes;
+    }
+
+    /**
+     * Eliminar los datos del Plugin de un usuario
+     *
+     * @param $id
+     * @return bool
+     * @internal param AuthenticatorData $AuthenticatorData
+     */
+    protected function deletePluginUserData($id)
+    {
+        try {
+            $this->Plugin->deleteDataForId($id);
+
+            PluginDataStore::save($this->Plugin);
+        } catch (SPException $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -352,7 +373,13 @@ class ActionController implements ItemControllerInterface
      */
     protected function pickRecoveryCode(AuthenticatorData $AuthenticatorData)
     {
-        if ($AuthenticatorData->getLastRecoveryTime() === 0) {
+        $recoveryTime = $AuthenticatorData->getLastRecoveryTime();
+        $codes = $AuthenticatorData->getRecoveryCodes();
+        $numCodes = count($codes);
+
+        if ($recoveryTime === 0
+            || (time() - $recoveryTime >= AuthenticatorPlugin::RECOVERY_GRACE_TIME && $numCodes === 0)
+        ) {
             try {
                 $codes = $this->generateRecoveryCodes();
             } catch (EnvironmentIsBrokenException $e) {
@@ -367,11 +394,7 @@ class ActionController implements ItemControllerInterface
             if ($this->savePluginUserData($AuthenticatorData) === false) {
                 return false;
             }
-        } else {
-            $codes = $AuthenticatorData->getRecoveryCodes();
         }
-
-        $numCodes = count($codes);
 
         if ($numCodes > 0) {
             return $codes[$numCodes - 1];

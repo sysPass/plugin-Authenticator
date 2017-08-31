@@ -37,6 +37,7 @@ class AuthenticatorPlugin extends PluginBase
 {
     const PLUGIN_NAME = 'Authenticator';
     const VERSION_URL = 'https://raw.githubusercontent.com/nuxsmin/sysPass-Plugins/master/version.json';
+    const RECOVERY_GRACE_TIME = 86400;
 
     /**
      * Receive update from subject
@@ -130,7 +131,7 @@ class AuthenticatorPlugin extends PluginBase
      */
     public function getVersion()
     {
-        return [1, 1, 1];
+        return [1, 1, 2];
     }
 
     /**
