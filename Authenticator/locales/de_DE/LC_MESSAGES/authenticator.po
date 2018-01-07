@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: sysPass\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-16 23:35+0100\n"
-"PO-Revision-Date: 2017-08-16 23:35+0100\n"
+"PO-Revision-Date: 2018-01-05 16:07+0100\n"
 "Last-Translator: nuxsmin <nuxsmin@syspass.org>\n"
-"Language-Team:  <language@syspass.org>\n"
+"Language-Team: <language@syspass.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 2.0.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: _t:2\n"
@@ -22,11 +22,11 @@ msgstr "Hey, dies ist eine DEMO!!"
 
 #: ../../../ActionController.class.php:144
 msgid "2FA Habilitado"
-msgstr "2FA Enabled"
+msgstr "2FA Deaktiviert"
 
 #: ../../../ActionController.class.php:147
 msgid "2FA Deshabilitado"
-msgstr "2FA Disabled"
+msgstr "2FA Aktiviert"
 
 #: ../../../ActionController.class.php:153
 msgid "Preferencias actualizadas"
@@ -38,16 +38,16 @@ msgstr "Falscher Code"
 
 #: ../../../ActionController.class.php:264
 msgid "Código de recuperación utilizado"
-msgstr "Recovery code used"
+msgstr "Wiederherstellungscode benutzt"
 
 #: ../../../ActionController.class.php:269
 #: ../../../ActionController.class.php:394
 msgid "Preferencias"
-msgstr "Preferences"
+msgstr "Einstellungen"
 
 #: ../../../ActionController.class.php:281
 msgid "Email de recuperación enviado"
-msgstr "Recovery email has been sent"
+msgstr "Email mit Wiederherstellungscode wurde gesendet"
 
 #: ../../../ActionController.class.php:308
 msgid "Código correcto"
@@ -59,37 +59,36 @@ msgstr "2FA Code Recovery"
 
 #: ../../../ActionController.class.php:331
 msgid "Se ha solicitado un código de recuperación para 2FA."
-msgstr "A 2FA recovery code has been requested."
+msgstr "Ein 2FA Wiederherstellungscode wurde angefragt."
 
 #: ../../../ActionController.class.php:333
 #, php-format
 msgid "El código de recuperación es: %s"
-msgstr "The recovery code is: %s"
+msgstr "Der Wiederherstellungscode lautet: %s"
 
 #: ../../../ActionController.class.php:389
 msgid "Códigos de recuperación visualizados"
-msgstr "Recovery codes displayed"
+msgstr "Wiederherstellungscodes angezeigt"
 
 #: ../../../ActionController.class.php:402
 msgid "Códigos de recuperación agotados"
-msgstr "There aren't any recovery codes available"
+msgstr "Es sind keine Wiederherstellungscodes verfügbar"
 
 #: ../../../LoginController.class.php:123
-#, fuzzy
 msgid "Aviso Caducidad"
 msgstr "Änderungsdatum"
 
 #: ../../../LoginController.class.php:128
 #, php-format
 msgid "El código 2FA se ha de restablecer en %d días"
-msgstr "Der 2FA-Code muss innerhalb von %d Tagen zurückgesetzt werden"
+msgstr "Der 2FA-Code muss innerhalb von %d Tagen zurückgesetzt werden."
 
 #: ../../../LoginController.class.php:134
 msgid ""
 "El código 2FA ha caducado. Es necesario restablecerlo desde las preferencias"
 msgstr ""
 "Der 2FA Code ist abgelaufen. Du musst es auf der Registerkarte Einstellungen "
-"zurücksetzen"
+"zurücksetzen."
 
 #: ../../../PreferencesController.class.php:98
 msgid "Seguridad"
@@ -106,7 +105,7 @@ msgstr "Code eingeben"
 
 #: ../../../themes/material-blue/views/main/login-2fa.inc:17
 msgid "Olvidé mi código"
-msgstr "Forgot my code"
+msgstr "Ich habe meinen Code vergessen"
 
 #: ../../../themes/material-blue/views/main/login-2fa.inc:30
 msgid "Volver a iniciar sesión"
@@ -161,7 +160,6 @@ msgstr ""
 "anmelden."
 
 #: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:87
-#, fuzzy
 msgid "Días Caducidad"
 msgstr "Änderungsdatum"
 
@@ -171,8 +169,8 @@ msgstr "Tage"
 
 #: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:101
 msgid "Códigos Recuperación"
-msgstr "Recovery Codes"
+msgstr "Wiederherstellungscodes"
 
 #: ../../../themes/material-blue/views/userpreferences/preferences-security.inc:103
 msgid "Ver códigos"
-msgstr "Display codes"
+msgstr "Codes anzeigen"
