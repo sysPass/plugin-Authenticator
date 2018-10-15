@@ -1,0 +1,25 @@
+{
+  "name": "syspass/authenticator-plugin",
+  "type": "syspass-plugin",
+  "description": "Plugin to use two factor based authentication with Google Authenticator.",
+  "homepage": "https://syspass.org",
+  "minimum-stability": "stable",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Rubén Domínguez",
+      "email": "nuxsmin@syspass.org",
+      "role": "Author/Developer",
+      "homepage": "https://syspass.org/"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/nuxsmin/sysPass/issues",
+    "source": "https://github.com/nuxsmin/sysPass-Authenticator",
+    "docs": "https://doc.syspass.org"
+  },
+  "require": {
+    "syspass/plugin-installer": "*",
+    "php": "~7.0 || ~7.1 || ~7.2"
+  }
+}

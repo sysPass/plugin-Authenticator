@@ -1,18 +1,18 @@
-## #sysPass - Plugins
+## sysPass Authenticator Plugin
 
 ----------------
 
-* Authenticator: Plugin para el uso de doble factor de autentificación con Google Authenticator
+Plugin to use two factor based authentication with Google Authenticator
 
 ----------------
 
-* Authenticator: A plugin to use two factor authentication with Google Authenticator
+Plugin para el uso de doble factor de autentificación con Google Authenticator
 
 ----------------
 
 https://syspass.org
 
-https://demo.syspass.org
+http://demo-beta.syspass.org:10080
 
 https://doc.syspass.org
 

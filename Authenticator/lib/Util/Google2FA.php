@@ -21,12 +21,12 @@
  * @author Phil
  **/
 
-namespace Plugins\Authenticator;
+namespace SP\Modules\Web\Plugins\Authenticator\Util;
 
 /**
  * Class Google2FA
  *
- * @package SP\Auth
+ * @package SP\Modules\Web\Plugins\Authenticator\Util
  */
 class Google2FA
 {
@@ -85,8 +85,8 @@ class Google2FA
      * Verifys a user inputted key against the current timestamp. Checks $window
      * keys either side of the timestamp.
      *
-     * @param string  $b32seed
-     * @param string  $key - User specified key
+     * @param string $b32seed
+     * @param string $key - User specified key
      * @param integer $window
      * @param boolean $useTimeStamp
      * @return boolean
@@ -122,7 +122,9 @@ class Google2FA
 
     /**
      * Decodes a base32 string into a binary string.
-     **/
+     *
+     * @throws \Exception
+     */
     public static function base32_decode($b32)
     {
 
@@ -155,8 +157,8 @@ class Google2FA
      * Takes the secret key and the timestamp and returns the one time
      * password.
      *
-     * @param string $key     - Secret key in binary form.
-     * @param int    $counter - Timestamp as returned by get_timestamp.
+     * @param string $key - Secret key in binary form.
+     * @param int $counter - Timestamp as returned by get_timestamp.
      * @return string
      * @throws \Exception
      */

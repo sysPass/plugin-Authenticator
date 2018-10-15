@@ -22,7 +22,7 @@
  * along with sysPass-Authenticator. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Plugins\Authenticator;
+namespace SP\Modules\Web\Plugins\Authenticator\Models;
 
 /**
  * Class AuthenticatorData

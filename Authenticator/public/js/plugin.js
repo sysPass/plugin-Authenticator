@@ -21,26 +21,25 @@
  * along with sysPass-Authenticator. If not, see <http://www.gnu.org/licenses/>.
  */
 
-sysPass.Plugin.Authenticator = function (Common) {
+sysPass.Plugins.Authenticator = function (Common) {
     "use strict";
 
-    var log = Common.log;
-    var base = "/inc/Plugins/Authenticator";
-
-    var twofa = {
+    const ajaxUrl = "/index.php";
+    const log = Common.log;
+    const twofa = {
         check: function ($obj) {
             log.info("Authenticator:twofa:check");
 
-            var opts = Common.appRequests().getRequestOpts();
-            opts.url = base + "/ajax/ajax_actions.php";
+            const opts = sysPassApp.requests.getRequestOpts();
+            opts.url = ajaxUrl + "?r=" + $obj.data("action-route") + "/" + $obj.data("item-id");
             opts.data = $obj.serialize();
 
-            Common.appRequests().getActionCall(opts, function (json) {
-                Common.msg.out(json);
+            sysPassApp.requests.getActionCall(opts, function (json) {
+                sysPassApp.msg.out(json);
 
                 if (json.status === 0) {
                     setTimeout(function () {
-                        Common.redirect("index.php");
+                        sysPassApp.util.redirect(json.data.url);
                     }, 1000);
                 }
             });
@@ -48,35 +47,23 @@ sysPass.Plugin.Authenticator = function (Common) {
         save: function ($obj) {
             log.info("Authenticator:twofa:save");
 
-            var opts = Common.appRequests().getRequestOpts();
-            opts.url = base + "/ajax/ajax_actions.php";
-            opts.data = $obj.serialize();
-
-            Common.appRequests().getActionCall(opts, function (json) {
-                Common.msg.out(json);
-
-                if (json.status === 0) {
-                    Common.appActions().doAction({
-                        actionId: $obj.data("nextaction-id"),
-                        itemId: $obj.data("activetab")
-                    });
-                }
-            });
+            sysPassApp.actions.user.saveSettings($obj);
         },
         viewRecoveryCodes: function ($obj) {
             log.info("Authenticator:twofa:viewRecoveryCodes");
 
-            var opts = Common.appRequests().getRequestOpts();
-            opts.url = base + "/ajax/ajax_actions.php";
+            const opts = sysPassApp.requests.getRequestOpts();
+            opts.url = ajaxUrl + "?r=" + $obj.data("action-route");
             opts.data = {
-                actionId: $obj.data("action-id"),
-                sk: Common.sk.get()
+                r: $obj.data("action-route") + "/" + $obj.data("item-id"),
+                sk: sysPassApp.sk.get(),
+                isAjax: 1
             };
 
-            Common.appRequests().getActionCall(opts, function (json) {
+            sysPassApp.requests.getActionCall(opts, function (json) {
                 if (json.status === 0) {
-                    var $results = $($obj.data("dst-id"));
-                    $results.find(".list-wrap").html(Common.appTheme().html.getList(json.data, "vpn_key"));
+                    const $results = $($obj.data("dst-id"));
+                    $results.find(".list-wrap").html(sysPassApp.theme.html.getList(json.data, "vpn_key"));
                     $results.show("slow");
                 } else {
                     Common.msg.out(json);
@@ -88,22 +75,20 @@ sysPass.Plugin.Authenticator = function (Common) {
     /**
      * Comprobar la versión más reciente
      */
-    var checkVersion = function () {
+    const checkVersion = function () {
         log.info("Authenticator:checkVersion");
 
-        var opts = Common.appRequests().getRequestOpts();
-        opts.url = base + "/ajax/ajax_actions.php";
+        const opts = sysPassApp.requests.getRequestOpts();
+        opts.url = ajaxUrl + "?r=authenticator/checkVersion";
         opts.useLoading = false;
         opts.data = {
-            actionId: 100,
             sk: Common.sk.get()
         };
 
-        return Common.appRequests().getActionCall(opts);
+        return sysPassApp.requests.getActionCall(opts);
     };
 
-    var init = function () {
-
+    const init = function () {
     };
 
     init();
