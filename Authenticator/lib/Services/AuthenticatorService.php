@@ -35,7 +35,7 @@ use SP\Modules\Web\Plugins\Authenticator\Plugin;
 use SP\Modules\Web\Plugins\Authenticator\Util\Google2FA;
 use SP\Plugin\PluginManager;
 use SP\Services\Service;
-use SP\Util\Util;
+use SP\Util\PasswordUtil;
 
 defined('APP_ROOT') || die();
 
@@ -63,7 +63,7 @@ final class AuthenticatorService extends Service
      */
     public static function makeInitializationKey()
     {
-        $iv = Util::generateRandomBytes(32);
+        $iv = PasswordUtil::generateRandomBytes(32);
 
         $base32 = new Base2n(
             5,
@@ -242,7 +242,7 @@ final class AuthenticatorService extends Service
         $i = 1;
 
         do {
-            $codes[] = Util::generateRandomBytes(10);
+            $codes[] = PasswordUtil::generateRandomBytes(10);
             $i++;
         } while ($i <= 10);
 
