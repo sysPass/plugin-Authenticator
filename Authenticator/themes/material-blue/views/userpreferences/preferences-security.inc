@@ -1,5 +1,12 @@
 <?php
-/** @var $icons \SP\Core\UI\ThemeIcons */
+/**
+ * @var \SP\Core\UI\ThemeIcons $icons
+ * @var \SP\Config\ConfigData  $configData
+ * @var callable               $_getvar
+ * @var \SP\Mvc\View\Template  $this
+ */
+
+$chk2FAEnabled = $_getvar('chk2FAEnabled');
 ?>
 
 <div id="title" class="titleNormal">
@@ -10,7 +17,7 @@
 <form method="post" name="frmSecurity" id="frmSecurity" class="form-action"
       data-onsubmit="twofa/save"
       data-plugin="Authenticator"
-      data-action-route="<?php echo $route; ?>"
+      data-action-route="<?php echo $_getvar('route'); ?>"
       data-hash="">
 
     <table id="tblSite" class="data tblConfig round">
@@ -33,12 +40,15 @@
                 <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="2faenabled">
                     <input type="checkbox" id="2faenabled"
                            class="mdl-switch__input mdl-color-text--indigo-400"
-                           name="2faenabled" <?php echo $chk2FAEnabled ? 'checked' : ''; ?>/>
+                           name="2faenabled" <?php echo $_getvar('chk2FAEnabled') ? 'checked' : ''; ?>/>
                     <span class="mdl-switch__label"><?php echo _t('authenticator', 'Activar'); ?></span>
                 </label>
 
                 <div id="qr_code_wrapper">
-                    <?php if (!$chk2FAEnabled && $qrCode): ?>
+                    <?php
+                    $qrCode = $_getvar('qrCode');
+
+                    if (!$chk2FAEnabled && $qrCode): ?>
                         <div id="qr_code">
                             <img id="qrcode" src="data:image/gif;base64,<?php echo $qrCode; ?>" alt="QR Code"/>
                         </div>
@@ -69,7 +79,7 @@
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="expiredays" name="expiredays" type="number" step="1"
                            min="0" max="720" class="mdl-textfield__input mdl-color-text--indigo-400"
-                           value="<?php echo $expireDays ?: 90; ?>" required/>
+                           value="<?php echo $_getvar('expireDays') ?: 90; ?>" required/>
                     <label class="mdl-textfield__label"
                            for="expiredays"><?php echo _t('authenticator', 'Días'); ?></label>
                 </div>
@@ -84,7 +94,7 @@
                        title="<?php echo _t('authenticator', 'Ver códigos'); ?>"
                        data-onclick="twofa/viewRecoveryCodes"
                        data-plugin="Authenticator"
-                       data-action-route="<?php echo $viewCodesRoute; ?>"
+                       data-action-route="<?php echo $_getvar('viewCodesRoute'); ?>"
                        data-dst-id="#recovery-codes">remove_red_eye</i>
                 </td>
                 <td class="valField" id="recovery-codes" style="display: none;">

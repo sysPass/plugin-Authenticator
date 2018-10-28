@@ -1,10 +1,17 @@
-<?php /** @var \SP\Core\UI\ThemeIcons $icons */ ?>
+<?php
+/**
+ * @var \SP\Core\UI\ThemeIcons       $icons
+ * @var \SP\Config\ConfigData        $configData
+ * @var callable                     $_getvar
+ * @var \SP\Mvc\View\Template        $this
+ */
+?>
 <div id="actions" class="authenticator-2fa" align="center">
     <div id="box-2fa" class="box-form">
         <form id="frmLogin2fa" action="" method="post" class="form-action"
               data-onsubmit="twofa/check"
               data-plugin="Authenticator"
-              data-action-route="<?php echo $route; ?>"
+              data-action-route="<?php echo $_getvar('route'); ?>"
               data-hash="">
             <fieldset id="resetdata">
                 <legend><?php echo _t('authenticator', 'Autentificación en 2 pasos'); ?></legend>
@@ -21,9 +28,9 @@
                     <span class="mdl-checkbox__label"><?php echo _t('authenticator', 'Olvidé mi código'); ?></span>
                 </label>
 
-                <?php if (isset($from, $from_hash)): ?>
-                    <input type="hidden" name="from" value="<?php echo $from; ?>"/>
-                    <input type="hidden" name="h" value="<?php echo $from_hash; ?>"/>
+                <?php if ($_getvar('from') && $_getvar('from_hash')): ?>
+                    <input type="hidden" name="from" value="<?php echo $_getvar('from'); ?>"/>
+                    <input type="hidden" name="h" value="<?php echo $_getvar('from_hash'); ?>"/>
                 <?php endif; ?>
 
                 <input type="hidden" name="sk" value=""/>

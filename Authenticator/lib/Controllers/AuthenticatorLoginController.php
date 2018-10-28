@@ -66,7 +66,8 @@ final class AuthenticatorLoginController extends ControllerBase
         $layoutHelper->setPage('authenticator-2fa');
         $layoutHelper->initBody();
 
-        $this->view->assign('useFixedHeader');
+        $this->view->assign('useFixedHeader', true);
+        $this->view->assign('useMenu', false);
         $this->view->assign('route', 'authenticator/checkCode');
 
         $this->checkExpireTime($this->userData->getId());
