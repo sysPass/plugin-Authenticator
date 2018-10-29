@@ -1,5 +1,5 @@
 {
-  "name": "syspass/authenticator-plugin",
+  "name": "syspass/plugin-authenticator",
   "type": "syspass-plugin",
   "description": "Plugin to use two factor based authentication with Google Authenticator.",
   "homepage": "https://syspass.org",
@@ -19,7 +19,19 @@
     "docs": "https://doc.syspass.org"
   },
   "require": {
-    "syspass/plugin-installer": "*",
+    "syspass/extension-installer-plugin": "*",
     "php": "~7.0 || ~7.1 || ~7.2"
+  },
+  "extra": {
+    "type": "web"
+  },
+  "autoload": {
+    "psr-4": {
+      "SP\\Modules\\Web\\Plugins\\Authenticator\\": "Authenticator/lib/SP/"
+    },
+    "classmap": [
+      "Authenticator/lib/Controllers/AuthenticatorController.php",
+      "Authenticator/lib/Controllers/AuthenticatorLoginController.php"
+    ]
   }
 }
