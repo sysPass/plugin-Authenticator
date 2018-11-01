@@ -20,7 +20,7 @@ Seleccionar la rama correcta para descargar una versión compatible con sysPass:
 * sysPass v3: rama Master
 * sysPass v2: rama 1.0
 
-Desde la versión 2 (comatible con sysPass v3), este plugin necesita ser instalado a través de composer
+Desde la versión 2 (compatible con sysPass v3), este plugin necesita ser instalado a través de composer
 
 ----------------
 
