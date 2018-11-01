@@ -27,11 +27,11 @@
   },
   "autoload": {
     "psr-4": {
-      "SP\\Modules\\Web\\Plugins\\Authenticator\\": "Authenticator/lib/SP/"
+      "SP\\Modules\\Web\\Plugins\\Authenticator\\": "src/lib/"
     },
     "classmap": [
-      "Authenticator/lib/Controllers/AuthenticatorController.php",
-      "Authenticator/lib/Controllers/AuthenticatorLoginController.php"
+      "src/lib/Controllers/AuthenticatorController.php",
+      "src/lib/Controllers/AuthenticatorLoginController.php"
     ]
   }
 }

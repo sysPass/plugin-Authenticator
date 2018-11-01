@@ -27,7 +27,7 @@ namespace SP\Modules\Web\Plugins\Authenticator;
 use Psr\Container\ContainerInterface;
 use SP\Core\Context\ContextInterface;
 use SP\Core\Events\Event;
-use SP\Core\UI\Theme;
+use SP\Core\UI\ThemeInterface;
 use SP\DataModel\PluginData;
 use SP\Modules\Web\Plugins\Authenticator\Controllers\PreferencesController;
 use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
@@ -80,7 +80,7 @@ class Plugin extends PluginBase
         }
 
         $this->base = dirname(__DIR__);
-        $this->themeDir = $this->base . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $dic->get(Theme::class)->getThemeName();
+        $this->themeDir = $this->base . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $dic->get(ThemeInterface::class)->getThemeName();
 
         $this->setLocales();
 
