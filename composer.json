@@ -21,7 +21,7 @@
   "require": {
     "syspass/extension-installer-plugin": "*",
     "php": "~7.0 || ~7.1 || ~7.2",
-    "bacon/bacon-qr-code": "^2.0"
+    "bacon/bacon-qr-code": "^1.0"
   },
   "extra": {
     "type": "web"
