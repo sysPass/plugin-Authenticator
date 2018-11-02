@@ -127,7 +127,8 @@ final class PreferencesController
 
                 $this->pluginContext->setUserData($authenticatorData);
 
-                $qrCode = $this->authenticatorService->getQrCode($userData->getLogin(), $authenticatorData->getIV());
+//                $qrCode = $this->authenticatorService->getQrCodeFromUrl($userData->getLogin(), $authenticatorData->getIV());
+                $qrCode = $this->authenticatorService->getQrCodeFromServer($userData->getLogin(), $authenticatorData->getIV());
             } elseif ($authenticatorData->isTwofaEnabled()
                 && $authenticatorData->getUserId() > 0
             ) {

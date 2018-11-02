@@ -24,6 +24,8 @@
 
 namespace SP\Modules\Web\Plugins\Authenticator\Services;
 
+use BaconQrCode\Renderer\Image\Png;
+use BaconQrCode\Writer;
 use Base2n;
 use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
 use GuzzleHttp\Client;
@@ -110,14 +112,14 @@ final class AuthenticatorService extends Service
     }
 
     /**
-     * checkReleaseAction
+     * getQrCode
      *
      * @param string $login
      * @param string $iv
      *
      * @return bool
      */
-    public function getQrCode(string $login, string $iv)
+    public function getQrCodeFromUrl(string $login, string $iv)
     {
         try {
             $this->extensionChecker->checkCurlAvailable(true);
@@ -155,6 +157,24 @@ final class AuthenticatorService extends Service
         $qrUrl .= urlencode('otpauth://totp/sysPass:syspass/' . $login . '?secret=' . $iv . '&issuer=sysPass');
 
         return $qrUrl;
+    }
+
+    /**
+     * getQrCode
+     *
+     * @param string $login
+     * @param string $iv
+     *
+     * @return string
+     */
+    public function getQrCodeFromServer(string $login, string $iv)
+    {
+        $renderer = new Png();
+        $renderer->setHeight(200);
+        $renderer->setWidth(200);
+
+        $writer = new Writer($renderer);
+        return base64_encode($writer->writeString('otpauth://totp/sysPass:syspass/' . $login . '?secret=' . $iv . '&issuer=sysPass'));
     }
 
     /**
