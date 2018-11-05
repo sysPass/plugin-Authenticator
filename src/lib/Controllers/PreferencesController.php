@@ -151,6 +151,6 @@ final class PreferencesController
             ErrorUtil::showExceptionInView($template, $e, null, false);
         }
 
-        return new DataTab(_t('authenticator', 'Seguridad'), $template);
+        return new DataTab(_t('authenticator', 'Security'), $template);
     }
 }

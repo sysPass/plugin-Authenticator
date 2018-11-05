@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Authenticator\n"
-"POT-Creation-Date: 2018-11-05 01:01+0100\n"
-"PO-Revision-Date: 2018-11-05 01:01+0100\n"
+"POT-Creation-Date: 2018-11-05 01:06+0100\n"
+"PO-Revision-Date: 2018-11-05 01:06+0100\n"
 "Last-Translator: nuxsmin <nuxsmin@syspass.org>\n"
 "Language-Team: nuxsmin@syspass.org\n"
-"Language: en_US\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,155 +18,155 @@ msgstr ""
 "X-Poedit-SearchPath-1: themes\n"
 
 #: lib/Controllers/AuthenticatorController.php:96
-msgid "Ey, esto es una DEMO!!"
-msgstr "Ey, this is a DEMO!!"
+msgid "Ey, this is a DEMO!!"
+msgstr "Ey, esto es una DEMO!!"
 
 #: lib/Controllers/AuthenticatorController.php:116
 #: lib/Controllers/AuthenticatorController.php:300
-msgid "Código incorrecto"
-msgstr "Wrong code"
+msgid "Wrong code"
+msgstr "Código incorrecto"
 
 #: lib/Controllers/AuthenticatorController.php:162
-msgid "Código de recuperación utilizado"
-msgstr "Recovery code used"
+msgid "Recovery code used"
+msgstr "Código de recuperación utilizado"
 
 #: lib/Controllers/AuthenticatorController.php:221
-msgid "2FA Habilitado"
-msgstr "2FA Enabled"
+msgid "2FA Enabled"
+msgstr "2FA Habilitado"
 
 #: lib/Controllers/AuthenticatorController.php:232
-msgid "2FA Deshabilitado"
-msgstr "2FA Disabled"
+msgid "2FA Disabled"
+msgstr "2FA Deshabilitado"
 
 #: lib/Controllers/AuthenticatorController.php:276
-msgid "Email de recuperación enviado"
-msgstr "Recovery email has been sent"
+msgid "Recovery email has been sent"
+msgstr "Email de recuperación enviado"
 
 #: lib/Controllers/AuthenticatorController.php:292
-msgid "Código correcto"
-msgstr "Correct code"
+msgid "Correct code"
+msgstr "Código correcto"
 
 #: lib/Controllers/AuthenticatorController.php:334
 #: lib/Controllers/AuthenticatorController.php:340
-msgid "Recuperación de Código 2FA"
-msgstr "2FA Code Recovery"
+msgid "2FA Code Recovery"
+msgstr "Recuperación de Código 2FA"
 
 #: lib/Controllers/AuthenticatorController.php:335
-msgid "Se ha solicitado un código de recuperación para 2FA."
-msgstr "A 2FA recovery code has been requested."
+msgid "A 2FA recovery code has been requested."
+msgstr "Se ha solicitado un código de recuperación para 2FA."
 
 #: lib/Controllers/AuthenticatorController.php:337
 #, php-format
-msgid "El código de recuperación es: %s"
-msgstr "The recovery code is: %s"
+msgid "The recovery code is: %s"
+msgstr "El código de recuperación es: %s"
 
 #: lib/Controllers/AuthenticatorController.php:374
-msgid "Códigos de recuperación visualizados"
-msgstr "Recovery codes displayed"
+msgid "Recovery codes displayed"
+msgstr "Códigos de recuperación visualizados"
 
 #: lib/Controllers/AuthenticatorController.php:381
 #: lib/Services/AuthenticatorService.php:219
-msgid "Códigos de recuperación agotados"
-msgstr "There aren't any recovery codes available"
+msgid "There aren't any recovery codes available"
+msgstr "Códigos de recuperación agotados"
 
 #: lib/Controllers/AuthenticatorLoginController.php:99
 #: lib/Controllers/AuthenticatorLoginController.php:105
-msgid "Aviso Caducidad"
-msgstr "Expire Notice"
+msgid "Expire Notice"
+msgstr "Aviso Caducidad"
 
 #: lib/Controllers/AuthenticatorLoginController.php:100
 #, php-format
-msgid "El código 2FA se ha de restablecer en %d días"
-msgstr "The 2FA code will need to be reset within %d days"
+msgid "The 2FA code will need to be reset within %d days"
+msgstr "El código 2FA se ha de restablecer en %d días"
 
 #: lib/Controllers/AuthenticatorLoginController.php:106
-msgid ""
+msgid "The 2FA code is expired. You need to reset it on preferences tab"
+msgstr ""
 "El código 2FA ha caducado. Es necesario restablecerlo desde las preferencias"
-msgstr "The 2FA code is expired. You need to reset it on preferences tab"
 
 #: lib/Controllers/PreferencesController.php:154
-msgid "Seguridad"
-msgstr "Security"
+msgid "Security"
+msgstr "Seguridad"
 
 #: themes/material-blue/views/login/index.inc:17
 #: themes/material-blue/views/userpreferences/preferences-security.inc:26
-msgid "Autentificación en 2 pasos"
-msgstr "Two Factor Authentication"
+msgid "Two Factor Authentication"
+msgstr "Autentificación en 2 pasos"
 
 #: themes/material-blue/views/login/index.inc:23
-msgid "Introducir código"
-msgstr "Enter code"
+msgid "Enter code"
+msgstr "Introducir código"
 
 #: themes/material-blue/views/login/index.inc:28
-msgid "Olvidé mi código"
-msgstr "Forgot my code"
+msgid "Forgot my code"
+msgstr "Olvidé mi código"
 
 #: themes/material-blue/views/login/index.inc:44
-msgid "Volver a iniciar sesión"
-msgstr "Back to log in"
+msgid "Back to log in"
+msgstr "Volver a iniciar sesión"
 
 #: themes/material-blue/views/login/index.inc:46
-msgid "Volver"
-msgstr "Back"
+msgid "Back"
+msgstr "Volver"
 
 #: themes/material-blue/views/login/index.inc:50
-msgid "Acceder"
-msgstr "Log in"
+msgid "Log in"
+msgstr "Acceder"
 
 #: themes/material-blue/views/login/index.inc:52
-msgid "Solicitar"
-msgstr "Request"
+msgid "Request"
+msgstr "Solicitar"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:14
-msgid "Autentificación"
-msgstr "Authentication"
+msgid "Authentication"
+msgstr "Autentificación"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:31
 msgid ""
-"Habilita la autentificación en 2 pasos que requiere de la introducción de un "
-"token generado por una aplicación como Google Authenticator."
-msgstr ""
 "Enables the two factor authentication that requires entering a token that is "
 "generated by an application like Google Authenticator."
+msgstr ""
+"Habilita la autentificación en 2 pasos que requiere de la introducción de un "
+"token generado por una aplicación como Google Authenticator."
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:35
-msgid ""
+msgid "Please, scan the provided QR code and then enter the 6 digits key."
+msgstr ""
 "Escanee el código QR proporcionado y a continuación introduzca la clave de 6 "
 "dígitos."
-msgstr "Please, scan the provided QR code and then enter the 6 digits key."
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:44
-msgid "Activar"
-msgstr "Enable"
+msgid "Enable"
+msgstr "Activar"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:56
-msgid "Error al obtener el código QR. Inténtelo de nuevo"
-msgstr "Error while getting the QR code. Please, try it again"
+msgid "Error while getting the QR code. Please, try it again"
+msgstr "Error al obtener el código QR. Inténtelo de nuevo"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:66
-msgid "Código"
-msgstr "Code"
+msgid "Code"
+msgstr "Código"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:71
 msgid ""
-"Una vez activada, sólo es posible acceder si se dispone del dispositivo "
-"generador de códigos asociado."
-msgstr ""
 "Once enabled, you wil only be able to log in by using the code generator "
 "linked device."
+msgstr ""
+"Una vez activada, sólo es posible acceder si se dispone del dispositivo "
+"generador de códigos asociado."
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:77
-msgid "Días Caducidad"
-msgstr "Expiry Days"
+msgid "Expiry Days"
+msgstr "Días Caducidad"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:84
-msgid "Días"
-msgstr "Days"
+msgid "Days"
+msgstr "Días"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:92
-msgid "Códigos Recuperación"
-msgstr "Recovery Codes"
+msgid "Recovery Codes"
+msgstr "Códigos Recuperación"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:94
-msgid "Ver códigos"
-msgstr "Display codes"
+msgid "Display codes"
+msgstr "Ver códigos"

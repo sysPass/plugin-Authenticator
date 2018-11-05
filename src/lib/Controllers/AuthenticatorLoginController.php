@@ -96,14 +96,14 @@ final class AuthenticatorLoginController extends ControllerBase
         if ($timeRemaining <= self::WARNING_TIME) {
             $this->eventDispatcher->notifyEvent('authenticator.expiry.notice',
                 new Event($this, EventMessage::factory()
-                    ->addDescription(_t('authenticator', 'Aviso Caducidad'))
-                    ->addDescription(sprintf(_t('authenticator', 'El código 2FA se ha de restablecer en %d días'), $timeRemaining / 86400)))
+                    ->addDescription(_t('authenticator', 'Expire Notice'))
+                    ->addDescription(sprintf(_t('authenticator', 'The 2FA code will need to be reset within %d days'), $timeRemaining / 86400)))
             );
         } elseif (time() > $expireTime) {
             $this->eventDispatcher->notifyEvent('authenticator.expiry.notice',
                 new Event($this, EventMessage::factory()
-                    ->addDescription(_t('authenticator', 'Aviso Caducidad'))
-                    ->addDescription(_t('authenticator', 'El código 2FA ha caducado. Es necesario restablecerlo desde las preferencias')))
+                    ->addDescription(_t('authenticator', 'Expire Notice'))
+                    ->addDescription(_t('authenticator', 'The 2FA code is expired. You need to reset it on preferences tab')))
             );
         }
     }

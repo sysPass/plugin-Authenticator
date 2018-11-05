@@ -216,7 +216,7 @@ final class AuthenticatorService extends Service
             return $code;
         }
 
-        throw new AuthenticatorException(_t('authenticator', 'Códigos de recuperación agotados'));
+        throw new AuthenticatorException(_t('authenticator', 'There aren\'t any recovery codes available'));
     }
 
     /**
