@@ -11,10 +11,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.11\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: .\n"
+"X-Poedit-Basepath: ../../..\n"
 "X-Poedit-KeywordsList: _t:2\n"
-"X-Poedit-SearchPath-0: ../../../lib\n"
-"X-Poedit-SearchPath-1: ../../../themes\n"
+"X-Poedit-SearchPath-0: lib\n"
+"X-Poedit-SearchPath-1: themes\n"
 
 #: ../../../lib/Controllers/AuthenticatorController.php:96
 msgid "Ey, this is a DEMO!!"

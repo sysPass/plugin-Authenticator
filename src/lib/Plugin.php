@@ -45,7 +45,7 @@ use SplSubject;
 class Plugin extends PluginBase
 {
     const PLUGIN_NAME = 'Authenticator';
-    const VERSION_URL = 'https://raw.githubusercontent.com/nuxsmin/sysPass-Plugins/master/version.json';
+    const VERSION_URL = 'https://raw.githubusercontent.com/sysPass/plugin-Authenticator/master/version.json';
     const RECOVERY_GRACE_TIME = 86400;
     /**
      * @var ContainerInterface
