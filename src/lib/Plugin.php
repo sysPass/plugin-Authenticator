@@ -130,7 +130,7 @@ class Plugin extends PluginBase
             $pluginContext->setTwoFApass(false);
             $session->setAuthCompleted(false);
 
-            $eventData = $event->getEventMessage()->getData();
+            $eventData = $event->getEventMessage()->getExtra();
 
             if (isset($eventData['redirect'][0])
                 && is_callable($eventData['redirect'][0])
@@ -202,7 +202,7 @@ class Plugin extends PluginBase
      */
     public function getVersion()
     {
-        return [2, 0, 0];
+        return [2, 0, 1];
     }
 
     /**
