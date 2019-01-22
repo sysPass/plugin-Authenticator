@@ -27,14 +27,12 @@ namespace SP\Modules\Web\Plugins\Authenticator\Controllers;
 use Psr\Container\ContainerInterface;
 use SP\Core\Context\ContextInterface;
 use SP\Core\Events\Event;
-use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
 use SP\Modules\Web\Plugins\Authenticator\Services\AuthenticatorService;
 use SP\Modules\Web\Plugins\Authenticator\Util\PluginContext;
 use SP\Mvc\Controller\ExtensibleTabControllerInterface;
 use SP\Mvc\View\Components\DataTab;
 use SP\Mvc\View\Template;
 use SP\Plugin\PluginInterface;
-use SP\Util\ArrayUtil;
 use SP\Util\ErrorUtil;
 
 /**
@@ -111,14 +109,7 @@ final class PreferencesController
             // Datos del usuario de la sesión
             $userData = $this->context->getUserData();
 
-            // Buscar al usuario en los datos del plugin
-            /** @var AuthenticatorData $authenticatorData */
-            $authenticatorData = ArrayUtil::searchInObject(
-                $this->plugin->getData(),
-                'userId',
-                $userData->getId(),
-                new AuthenticatorData()
-            );
+            $authenticatorData = $this->plugin->getData();
 
             $qrCode = '';
 

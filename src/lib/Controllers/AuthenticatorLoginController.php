@@ -70,7 +70,7 @@ final class AuthenticatorLoginController extends ControllerBase
         $this->view->assign('useMenu', false);
         $this->view->assign('route', 'authenticator/checkCode');
 
-        $this->checkExpireTime($this->userData->getId());
+        $this->checkExpireTime();
 
         $this->prepareSignedUriOnView();
 
@@ -79,12 +79,10 @@ final class AuthenticatorLoginController extends ControllerBase
 
     /**
      * Comprobar la caducidad del código
-     *
-     * @param $userId
      */
-    protected function checkExpireTime($userId)
+    protected function checkExpireTime()
     {
-        $data = $this->plugin->getDataForId($userId);
+        $data = $this->plugin->getData();
 
         if ($data === null || empty($data->getExpireDays())) {
             return;
@@ -115,6 +113,6 @@ final class AuthenticatorLoginController extends ControllerBase
     protected function initialize()
     {
         $this->plugin = $this->dic->get(PluginManager::class)
-            ->getPluginInfo(Plugin::PLUGIN_NAME);
+            ->getPlugin(Plugin::PLUGIN_NAME);
     }
 }

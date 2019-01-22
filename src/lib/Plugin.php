@@ -26,21 +26,24 @@ namespace SP\Modules\Web\Plugins\Authenticator;
 
 use Psr\Container\ContainerInterface;
 use SP\Core\Context\ContextInterface;
+use SP\Core\Context\SessionContext;
 use SP\Core\Events\Event;
 use SP\Core\UI\ThemeInterface;
-use SP\DataModel\PluginData;
 use SP\Modules\Web\Plugins\Authenticator\Controllers\PreferencesController;
 use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
+use SP\Modules\Web\Plugins\Authenticator\Services\UpgradeService;
 use SP\Modules\Web\Plugins\Authenticator\Util\PluginContext;
 use SP\Mvc\Controller\ExtensibleTabControllerInterface;
 use SP\Plugin\PluginBase;
-use SP\Util\Util;
+use SP\Plugin\PluginOperation;
+use SP\Repositories\NoSuchItemException;
 use SplSubject;
 
 /**
  * Class Plugin
  *
  * @package SP\Modules\Web\Plugins\Authenticator
+ * @property AuthenticatorData $data
  */
 class Plugin extends PluginBase
 {
@@ -51,6 +54,14 @@ class Plugin extends PluginBase
      * @var ContainerInterface
      */
     private $dic;
+    /**
+     * @var PluginOperation
+     */
+    private $pluginOperation;
+    /**
+     * @var SessionContext
+     */
+    private $session;
 
     /**
      * Receive update from subject
@@ -75,16 +86,14 @@ class Plugin extends PluginBase
      */
     public function init(ContainerInterface $dic)
     {
-        if (!is_array($this->data)) {
-            $this->data = [];
-        }
-
         $this->base = dirname(__DIR__);
         $this->themeDir = $this->base . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $dic->get(ThemeInterface::class)->getThemeName();
 
         $this->setLocales();
 
         $this->dic = $dic;
+
+        $this->session = $this->dic->get(ContextInterface::class);
     }
 
     /**
@@ -103,12 +112,33 @@ class Plugin extends PluginBase
                 /** @var ExtensibleTabControllerInterface $source */
                 $source = $event->getSource(ExtensibleTabControllerInterface::class);
 
+                $this->loadData();
                 (new PreferencesController($source, $this, $this->dic))
                     ->setUp();
                 break;
             case 'login.finish':
+                $this->loadData();
                 $this->checkLogin($event);
                 break;
+        }
+    }
+
+    /**
+     * Load plugin's data for current user
+     */
+    private function loadData()
+    {
+        try {
+            $this->data = $this->pluginOperation->get(
+                $this->session->getUserData()->getId(),
+                AuthenticatorData::class
+            );
+        } catch (NoSuchItemException $e) {
+            $this->data = new AuthenticatorData();
+        } catch (\Exception $e) {
+            processException($e);
+
+            $this->data = new AuthenticatorData();
         }
     }
 
@@ -121,48 +151,40 @@ class Plugin extends PluginBase
      */
     private function checkLogin(Event $event)
     {
-        $session = $this->dic->get(ContextInterface::class);
         $pluginContext = $this->dic->get(PluginContext::class);
 
-        $data = $this->getDataForId($session->getUserData()->getId());
-
-        if ($data !== null && $data->isTwofaEnabled()) {
+        if ($this->data !== null && $this->data->isTwofaEnabled()) {
             $pluginContext->setTwoFApass(false);
-            $session->setAuthCompleted(false);
+            $this->session->setAuthCompleted(false);
 
             $eventData = $event->getEventMessage()->getExtra();
 
             if (isset($eventData['redirect'][0])
                 && is_callable($eventData['redirect'][0])
             ) {
-                $session->setTrasientKey('redirect', $eventData['redirect'][0]('authenticatorLogin/index'));
+                $this->session->setTrasientKey('redirect', $eventData['redirect'][0]('authenticatorLogin/index'));
             } else {
-                $session->setTrasientKey('redirect', 'index.php?r=authenticatorLogin/index');
+                $this->session->setTrasientKey('redirect', 'index.php?r=authenticatorLogin/index');
             }
         } else {
             $pluginContext->setTwoFApass(true);
-            $session->setAuthCompleted(true);
+            $this->session->setAuthCompleted(true);
         }
     }
 
     /**
-     * Devolver los datos de un Id
-     *
-     * @param $id
-     *
-     * @return AuthenticatorData|null
-     */
-    public function getDataForId($id)
-    {
-        return isset($this->data[$id]) ? $this->data[$id] : null;
-    }
-
-    /**
-     * @return array|AuthenticatorData[]
+     * @return AuthenticatorData
      */
     public function getData()
     {
-        return (array)parent::getData();
+        if ($this->data === null
+            && $this->session->isLoggedIn()
+            && $this->pluginOperation !== null
+        ) {
+            $this->loadData();
+        }
+
+        return parent::getData();
     }
 
     /**
@@ -202,7 +224,7 @@ class Plugin extends PluginBase
      */
     public function getVersion()
     {
-        return [2, 0, 1];
+        return [2, 1, 0];
     }
 
     /**
@@ -212,7 +234,7 @@ class Plugin extends PluginBase
      */
     public function getCompatibleVersion()
     {
-        return [3, 0];
+        return [3, 1];
     }
 
     /**
@@ -239,13 +261,15 @@ class Plugin extends PluginBase
      * Establecer los datos de un Id
      *
      * @param                   $id
-     * @param AuthenticatorData $AuthenticatorData
+     * @param AuthenticatorData $authenticatorData
      *
      * @return Plugin
+     * @throws \SP\Core\Exceptions\ConstraintException
+     * @throws \SP\Core\Exceptions\QueryException
      */
-    public function setDataForId($id, AuthenticatorData $AuthenticatorData)
+    public function setDataForId($id, AuthenticatorData $authenticatorData)
     {
-        $this->data[$id] = $AuthenticatorData;
+        $this->pluginOperation->update($id, $authenticatorData);
 
         return $this;
     }
@@ -254,22 +278,37 @@ class Plugin extends PluginBase
      * Eliminar los datos de un Id
      *
      * @param $id
+     *
+     * @throws \SP\Core\Exceptions\ConstraintException
+     * @throws \SP\Core\Exceptions\QueryException
+     * @throws \SP\Repositories\NoSuchItemException
      */
     public function deleteDataForId($id)
     {
-        if (isset($this->data[$id])) {
-            unset($this->data[$id]);
-        }
+        $this->pluginOperation->delete($id);
     }
 
     /**
-     * @param mixed $pluginData
+     * @param mixed $pluginOperation
      */
-    public function onLoadData(PluginData $pluginData)
+    public function onLoad(PluginOperation $pluginOperation)
     {
-        $this->data = Util::unserialize(
-            AuthenticatorData::class,
-            $pluginData->getData()
-        );
+        $this->pluginOperation = $pluginOperation;
+    }
+
+    /**
+     * @param string          $version
+     * @param PluginOperation $pluginOperation
+     * @param mixed           $extra
+     *
+     * @throws Services\AuthenticatorException
+     */
+    public function upgrade(string $version, PluginOperation $pluginOperation, $extra = null)
+    {
+        switch ($version) {
+            case '310.19012201':
+                (new UpgradeService($pluginOperation))->upgrade_310_19012201($extra);
+                break;
+        }
     }
 }

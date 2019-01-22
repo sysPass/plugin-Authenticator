@@ -39,7 +39,6 @@ use SP\Repositories\Track\TrackRequest;
 use SP\Services\Mail\MailService;
 use SP\Services\Track\TrackService;
 use SP\Services\User\UserLoginResponse;
-use SP\Util\ArrayUtil;
 
 /**
  * Class ActionController
@@ -248,13 +247,7 @@ final class AuthenticatorController extends SimpleControllerBase
             $pin = $this->request->analyzeString('pin');
             $codeReset = $this->request->analyzeBool('code_reset', false);
 
-            // Buscar al usuario en los datos del plugin
-            /** @var AuthenticatorData $authenticatorData */
-            $authenticatorData = ArrayUtil::searchInObject(
-                $this->plugin->getData(),
-                'userId',
-                $this->userData->getId()
-            );
+            $authenticatorData = $this->plugin->getData();
 
             if ($authenticatorData === null) {
                 $this->pluginContext->setTwoFApass(false);
@@ -360,7 +353,7 @@ final class AuthenticatorController extends SimpleControllerBase
     public function showRecoveryCodesAction()
     {
         try {
-            $authenticatorData = $this->plugin->getDataForId($this->userData->getId());
+            $authenticatorData = $this->plugin->getData();
 
             if ($authenticatorData === null) {
                 throw new AuthenticatorException(__u('User not found'));
@@ -412,7 +405,7 @@ final class AuthenticatorController extends SimpleControllerBase
         $this->pluginContext = $this->dic->get(PluginContext::class);
         $this->trackService = $this->dic->get(TrackService::class);
         $this->plugin = $this->dic->get(PluginManager::class)
-            ->getPluginInfo(Plugin::PLUGIN_NAME);
+            ->getPlugin(Plugin::PLUGIN_NAME);
         $this->userData = $this->session->getUserData();
         $this->trackRequest = $this->trackService->getTrackRequest(__CLASS__);
     }
