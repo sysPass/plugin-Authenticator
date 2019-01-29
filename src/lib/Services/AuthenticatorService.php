@@ -185,9 +185,11 @@ final class AuthenticatorService extends Service
      * @return string
      * @throws AuthenticatorException
      * @throws EnvironmentIsBrokenException
+     * @throws \Defuse\Crypto\Exception\CryptoException
      * @throws \SP\Core\Exceptions\ConstraintException
+     * @throws \SP\Core\Exceptions\NoSuchPropertyException
      * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
+     * @throws \SP\Services\ServiceException
      */
     public function pickRecoveryCode(AuthenticatorData $authenticatorData)
     {
@@ -220,34 +222,20 @@ final class AuthenticatorService extends Service
     }
 
     /**
-     * @param                   $codes
+     * @param array             $codes
      * @param AuthenticatorData $authenticatorData
      *
+     * @throws \Defuse\Crypto\Exception\CryptoException
      * @throws \SP\Core\Exceptions\ConstraintException
+     * @throws \SP\Core\Exceptions\NoSuchPropertyException
      * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
+     * @throws \SP\Services\ServiceException
      */
     private function saveRecoveryCodes(array $codes, AuthenticatorData $authenticatorData)
     {
         $authenticatorData->setRecoveryCodes($codes);
         $authenticatorData->setLastRecoveryTime(time());
-        $this->savePluginUserData($authenticatorData);
-    }
-
-    /**
-     * Guardar datos del Plugin de un usuario
-     *
-     * @param AuthenticatorData $authenticatorData
-     *
-     * @return void
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
-     */
-    public function savePluginUserData(AuthenticatorData $authenticatorData)
-    {
-        $this->plugin->setDataForId($authenticatorData->getUserId(), $authenticatorData);
-        $this->plugin->saveData();
+        $this->plugin->saveData($authenticatorData->getUserId(), $authenticatorData);
     }
 
     /**
@@ -272,7 +260,7 @@ final class AuthenticatorService extends Service
     /**
      * Eliminar los datos del Plugin de un usuario
      *
-     * @param $id
+     * @param int $id
      *
      * @return void
      * @throws \SP\Core\Exceptions\ConstraintException
@@ -283,7 +271,6 @@ final class AuthenticatorService extends Service
     public function deletePluginUserData($id)
     {
         $this->plugin->deleteDataForId($id);
-        $this->plugin->saveData();
     }
 
     /**
@@ -328,9 +315,11 @@ final class AuthenticatorService extends Service
      * @param string            $code
      *
      * @return bool
+     * @throws \Defuse\Crypto\Exception\CryptoException
      * @throws \SP\Core\Exceptions\ConstraintException
+     * @throws \SP\Core\Exceptions\NoSuchPropertyException
      * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
+     * @throws \SP\Services\ServiceException
      */
     public function useRecoveryCode(AuthenticatorData $authenticatorData, $code)
     {
@@ -338,9 +327,14 @@ final class AuthenticatorService extends Service
         $usedKey = array_search($code, $codes, true);
 
         if ($usedKey !== false) {
-            $this->saveRecoveryCodes(array_values(array_filter($codes, function ($key) use ($usedKey) {
-                return $key !== $usedKey;
-            }, ARRAY_FILTER_USE_KEY)), $authenticatorData);
+            $this->saveRecoveryCodes(
+                array_values(
+                    array_filter($codes,
+                        function ($key) use ($usedKey) {
+                            return $key !== $usedKey;
+                        }, ARRAY_FILTER_USE_KEY)
+                ),
+                $authenticatorData);
 
             return true;
         }
@@ -352,6 +346,6 @@ final class AuthenticatorService extends Service
     {
         $this->extensionChecker = $this->dic->get(PhpExtensionChecker::class);
         $this->plugin = $this->dic->get(PluginManager::class)
-            ->getPluginInfo(Plugin::PLUGIN_NAME);
+            ->getPlugin(Plugin::PLUGIN_NAME);
     }
 }

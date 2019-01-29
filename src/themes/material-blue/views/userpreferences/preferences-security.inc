@@ -40,7 +40,7 @@ $chk2FAEnabled = $_getvar('chk2FAEnabled');
                 <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="2faenabled">
                     <input type="checkbox" id="2faenabled"
                            class="mdl-switch__input mdl-color-text--indigo-400"
-                           name="2faenabled" <?php echo $_getvar('chk2FAEnabled') ? 'checked' : ''; ?>/>
+                           name="2faenabled" <?php echo $chk2FAEnabled ? 'checked' : ''; ?>/>
                     <span class="mdl-switch__label"><?php echo _t('authenticator', 'Enable'); ?></span>
                 </label>
 

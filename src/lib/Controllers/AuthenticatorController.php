@@ -193,10 +193,13 @@ final class AuthenticatorController extends SimpleControllerBase
      * @param AuthenticatorData $authenticatorData
      *
      * @return bool
+     * @throws \Defuse\Crypto\Exception\CryptoException
      * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
      * @throws \SP\Core\Exceptions\ConstraintException
+     * @throws \SP\Core\Exceptions\NoSuchPropertyException
      * @throws \SP\Core\Exceptions\QueryException
      * @throws \SP\Repositories\NoSuchItemException
+     * @throws \SP\Services\ServiceException
      */
     private function save2FAStatus(AuthenticatorData $authenticatorData)
     {
@@ -211,9 +214,7 @@ final class AuthenticatorController extends SimpleControllerBase
             $authenticatorData->setDate(time());
             $authenticatorData->setRecoveryCodes($this->authenticatorService->generateRecoveryCodes());
 
-            $this->plugin->setDataForId($this->userData->getId(), $authenticatorData);
-
-            $this->authenticatorService->savePluginUserData($authenticatorData);
+            $this->plugin->saveData($this->userData->getId(), $authenticatorData);
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_SUCCESS,
@@ -404,9 +405,10 @@ final class AuthenticatorController extends SimpleControllerBase
         $this->authenticatorService = $this->dic->get(AuthenticatorService::class);
         $this->pluginContext = $this->dic->get(PluginContext::class);
         $this->trackService = $this->dic->get(TrackService::class);
-        $this->plugin = $this->dic->get(PluginManager::class)
-            ->getPlugin(Plugin::PLUGIN_NAME);
         $this->userData = $this->session->getUserData();
         $this->trackRequest = $this->trackService->getTrackRequest(__CLASS__);
+
+        $pluginManager = $this->dic->get(PluginManager::class);
+        $this->plugin = $pluginManager->getPlugin(Plugin::PLUGIN_NAME, true);
     }
 }

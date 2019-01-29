@@ -27,6 +27,7 @@ namespace SP\Modules\Web\Plugins\Authenticator\Controllers;
 use Psr\Container\ContainerInterface;
 use SP\Core\Context\ContextInterface;
 use SP\Core\Events\Event;
+use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
 use SP\Modules\Web\Plugins\Authenticator\Services\AuthenticatorService;
 use SP\Modules\Web\Plugins\Authenticator\Util\PluginContext;
 use SP\Mvc\Controller\ExtensibleTabControllerInterface;
@@ -109,27 +110,29 @@ final class PreferencesController
             // Datos del usuario de la sesión
             $userData = $this->context->getUserData();
 
+            /** @var AuthenticatorData $authenticatorData */
             $authenticatorData = $this->plugin->getData();
 
             $qrCode = '';
 
+            if ($authenticatorData !== null) {
+                $template->assign('chk2FAEnabled', $authenticatorData->isTwofaEnabled());
+                $template->assign('expireDays', $authenticatorData->getExpireDays());
+            } else {
+                $authenticatorData = new AuthenticatorData();
+                $template->assign('chk2FAEnabled', false);
+            }
+
+            $this->pluginContext->setUserData($authenticatorData);
+
             if (!$authenticatorData->isTwofaEnabled()) {
                 $authenticatorData->setIV(AuthenticatorService::makeInitializationKey());
 
-                $this->pluginContext->setUserData($authenticatorData);
-
-//                $qrCode = $this->authenticatorService->getQrCodeFromUrl($userData->getLogin(), $authenticatorData->getIV());
                 $qrCode = $this->authenticatorService->getQrCodeFromServer($userData->getLogin(), $authenticatorData->getIV());
-            } elseif ($authenticatorData->isTwofaEnabled()
-                && $authenticatorData->getUserId() > 0
-            ) {
-                $this->pluginContext->setUserData($authenticatorData);
             }
 
             $template->assign('qrCode', $qrCode);
             $template->assign('userId', $userData->getId());
-            $template->assign('chk2FAEnabled', $authenticatorData->isTwofaEnabled());
-            $template->assign('expireDays', $authenticatorData->getExpireDays());
             $template->assign('route', 'authenticator/save');
             $template->assign('viewCodesRoute', 'authenticator/showRecoveryCodes');
         } catch (\Exception $e) {

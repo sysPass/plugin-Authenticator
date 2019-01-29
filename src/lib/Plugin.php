@@ -36,7 +36,6 @@ use SP\Modules\Web\Plugins\Authenticator\Util\PluginContext;
 use SP\Mvc\Controller\ExtensibleTabControllerInterface;
 use SP\Plugin\PluginBase;
 use SP\Plugin\PluginOperation;
-use SP\Repositories\NoSuchItemException;
 use SplSubject;
 
 /**
@@ -54,10 +53,6 @@ class Plugin extends PluginBase
      * @var ContainerInterface
      */
     private $dic;
-    /**
-     * @var PluginOperation
-     */
-    private $pluginOperation;
     /**
      * @var SessionContext
      */
@@ -109,12 +104,12 @@ class Plugin extends PluginBase
     {
         switch ($eventType) {
             case 'show.userSettings':
-                /** @var ExtensibleTabControllerInterface $source */
-                $source = $event->getSource(ExtensibleTabControllerInterface::class);
-
                 $this->loadData();
-                (new PreferencesController($source, $this, $this->dic))
-                    ->setUp();
+                (new PreferencesController(
+                    $event->getSource(ExtensibleTabControllerInterface::class),
+                    $this,
+                    $this->dic)
+                )->setUp();
                 break;
             case 'login.finish':
                 $this->loadData();
@@ -133,12 +128,8 @@ class Plugin extends PluginBase
                 $this->session->getUserData()->getId(),
                 AuthenticatorData::class
             );
-        } catch (NoSuchItemException $e) {
-            $this->data = new AuthenticatorData();
         } catch (\Exception $e) {
             processException($e);
-
-            $this->data = new AuthenticatorData();
         }
     }
 
@@ -153,7 +144,9 @@ class Plugin extends PluginBase
     {
         $pluginContext = $this->dic->get(PluginContext::class);
 
-        if ($this->data !== null && $this->data->isTwofaEnabled()) {
+        if ($this->data !== null
+            && $this->data->isTwofaEnabled()
+        ) {
             $pluginContext->setTwoFApass(false);
             $this->session->setAuthCompleted(false);
 
@@ -258,23 +251,6 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Establecer los datos de un Id
-     *
-     * @param                   $id
-     * @param AuthenticatorData $authenticatorData
-     *
-     * @return Plugin
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\QueryException
-     */
-    public function setDataForId($id, AuthenticatorData $authenticatorData)
-    {
-        $this->pluginOperation->update($id, $authenticatorData);
-
-        return $this;
-    }
-
-    /**
      * Eliminar los datos de un Id
      *
      * @param $id
@@ -285,15 +261,15 @@ class Plugin extends PluginBase
      */
     public function deleteDataForId($id)
     {
-        $this->pluginOperation->delete($id);
+        $this->pluginOperation->delete((int)$id);
     }
 
     /**
-     * @param mixed $pluginOperation
+     * onLoad
      */
-    public function onLoad(PluginOperation $pluginOperation)
+    public function onLoad()
     {
-        $this->pluginOperation = $pluginOperation;
+        $this->loadData();
     }
 
     /**

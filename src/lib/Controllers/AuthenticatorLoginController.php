@@ -52,6 +52,7 @@ final class AuthenticatorLoginController extends ControllerBase
      *
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
+     * @throws \SP\Core\Exceptions\SessionTimeout
      * @throws \SP\Services\Auth\AuthException
      */
     public function indexAction()
