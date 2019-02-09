@@ -1,7 +1,7 @@
 {
   "name": "syspass/plugin-authenticator",
   "type": "syspass-plugin",
-  "description": "Plugin to use two factor based authentication with Google Authenticator.",
+  "description": "2FA authentication plugin for sysPass based on TOTP algorithm (RFC 6238)",
   "homepage": "https://syspass.org",
   "minimum-stability": "stable",
   "license": "GPL-3.0",
