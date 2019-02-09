@@ -256,7 +256,7 @@ final class AuthenticatorController extends SimpleControllerBase
                 $this->userData->getId()
             );
 
-            if ($authenticatorData === null) {
+            if ($authenticatorData === false) {
                 $this->pluginContext->setTwoFApass(false);
                 $this->session->setAuthCompleted(false);
 
