@@ -345,6 +345,8 @@ final class AuthenticatorController extends SimpleControllerBase
             }
 
             return false;
+        } catch (AuthenticatorException $e) {
+            throw $e;
         } catch (\Exception $e) {
             processException($e);
 
