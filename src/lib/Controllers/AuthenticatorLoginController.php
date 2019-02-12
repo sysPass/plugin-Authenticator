@@ -54,6 +54,7 @@ final class AuthenticatorLoginController extends ControllerBase
      * @throws \DI\NotFoundException
      * @throws \SP\Core\Exceptions\SessionTimeout
      * @throws \SP\Services\Auth\AuthException
+     * @throws \SP\Core\Exceptions\SessionTimeout
      */
     public function indexAction()
     {
@@ -70,6 +71,8 @@ final class AuthenticatorLoginController extends ControllerBase
         $this->view->assign('useFixedHeader', true);
         $this->view->assign('useMenu', false);
         $this->view->assign('route', 'authenticator/checkCode');
+        $this->view->assign('isMailEnabled', $this->configData->isMailEnabled());
+        $this->view->assign('recoveryGraceTime', Plugin::RECOVERY_GRACE_TIME / 3600);
 
         $this->checkExpireTime();
 

@@ -38,10 +38,15 @@ sysPass.Plugins.Authenticator = function (Common) {
                 sysPassApp.msg.out(json);
 
                 if (json.status === 0) {
-                    setTimeout(function () {
-                        sysPassApp.util.redirect(json.data.url);
-                    }, 1000);
+                    if (json.data.url !== undefined) {
+                        setTimeout(function () {
+                            sysPassApp.util.redirect(json.data.url);
+                        }, 1000);
+                    }
                 }
+
+                document.querySelector('.mdl-js-checkbox').MaterialCheckbox.uncheck();
+                $obj.find("#pin").val('');
             });
         },
         save: function ($obj) {

@@ -250,7 +250,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             $authenticatorData = $this->plugin->getData();
 
-            if ($authenticatorData === null) {
+            if ($authenticatorData === false) {
                 $this->pluginContext->setTwoFApass(false);
                 $this->session->setAuthCompleted(false);
 
@@ -339,6 +339,8 @@ final class AuthenticatorController extends SimpleControllerBase
             }
 
             return false;
+        } catch (AuthenticatorException $e) {
+            throw $e;
         } catch (\Exception $e) {
             processException($e);
 
