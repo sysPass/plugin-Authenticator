@@ -185,9 +185,6 @@ final class AuthenticatorService extends Service
      * @return string
      * @throws AuthenticatorException
      * @throws EnvironmentIsBrokenException
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
      */
     public function pickRecoveryCode(AuthenticatorData $authenticatorData)
     {
@@ -196,11 +193,7 @@ final class AuthenticatorService extends Service
         $numCodes = count($codes);
 
         if ($numCodes > 0) {
-            $code = array_pop($codes);
-
-            $this->saveRecoveryCodes($codes, $authenticatorData);
-
-            return $code;
+            return $codes[1];
         }
 
         if ($recoveryTime === 0
@@ -209,11 +202,7 @@ final class AuthenticatorService extends Service
         ) {
             $codes = $this->generateRecoveryCodes();
 
-            $code = array_pop($codes);
-
-            $this->saveRecoveryCodes($codes, $authenticatorData);
-
-            return $code;
+            return $codes[1];
         }
 
         throw new AuthenticatorException(_t('authenticator', 'There aren\'t any recovery codes available'));
