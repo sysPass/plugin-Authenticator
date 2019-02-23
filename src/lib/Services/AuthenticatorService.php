@@ -193,7 +193,7 @@ final class AuthenticatorService extends Service
         $numCodes = count($codes);
 
         if ($numCodes > 0) {
-            return $codes[1];
+            return $codes[0];
         }
 
         if ($recoveryTime === 0
@@ -202,7 +202,7 @@ final class AuthenticatorService extends Service
         ) {
             $codes = $this->generateRecoveryCodes();
 
-            return $codes[1];
+            return $codes[0];
         }
 
         throw new AuthenticatorException(_t('authenticator', 'There aren\'t any recovery codes available'));
