@@ -34,6 +34,7 @@ use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
 use SP\Modules\Web\Plugins\Authenticator\Util\PluginContext;
 use SP\Mvc\Controller\ExtensibleTabControllerInterface;
 use SP\Plugin\PluginBase;
+use SP\Plugin\PluginInterface;
 use SP\Util\Util;
 use SplSubject;
 
@@ -67,6 +68,15 @@ class Plugin extends PluginBase
     public function update(SplSubject $subject)
     {
     }
+    
+    // Implement methods onLoad & upgrade from PluginInterface, otherwise throws an error
+    public function onLoad()
+    {
+    }
+    
+    public function upgrade(string $version, PluginOperation $pluginOperation, $extra = NULL)
+    {
+    }        
 
     /**
      * Inicialización del plugin
