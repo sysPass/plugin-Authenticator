@@ -2,8 +2,8 @@
 /**
  * sysPass
  *
- * @author nuxsmin
- * @link https://syspass.org
+ * @author    nuxsmin
+ * @link      https://syspass.org
  * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
  *
  * This file is part of sysPass.
@@ -24,8 +24,17 @@
 
 namespace SP\Modules\Web\Controllers;
 
+use Defuse\Crypto\Exception\CryptoException;
+use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+use DI\DependencyException;
+use DI\NotFoundException;
+use Exception;
 use SP\Core\Events\Event;
 use SP\Core\Events\EventMessage;
+use SP\Core\Exceptions\ConstraintException;
+use SP\Core\Exceptions\InvalidArgumentException;
+use SP\Core\Exceptions\NoSuchPropertyException;
+use SP\Core\Exceptions\QueryException;
 use SP\Core\Messages\MailMessage;
 use SP\Http\JsonResponse;
 use SP\Modules\Web\Controllers\Traits\JsonTrait;
@@ -35,8 +44,10 @@ use SP\Modules\Web\Plugins\Authenticator\Services\AuthenticatorException;
 use SP\Modules\Web\Plugins\Authenticator\Services\AuthenticatorService;
 use SP\Modules\Web\Plugins\Authenticator\Util\PluginContext;
 use SP\Plugin\PluginManager;
+use SP\Repositories\NoSuchItemException;
 use SP\Repositories\Track\TrackRequest;
 use SP\Services\Mail\MailService;
+use SP\Services\ServiceException;
 use SP\Services\Track\TrackService;
 use SP\Services\User\UserLoginResponse;
 
@@ -119,7 +130,7 @@ final class AuthenticatorController extends SimpleControllerBase
                 JsonResponse::JSON_ERROR,
                 $e->getMessage()
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             processException($e);
 
             $this->eventDispatcher->notifyEvent('exception', new Event($e));
@@ -139,7 +150,7 @@ final class AuthenticatorController extends SimpleControllerBase
     {
         try {
             $this->trackService->add($this->trackRequest);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             processException($e);
         }
     }
@@ -149,7 +160,7 @@ final class AuthenticatorController extends SimpleControllerBase
      * @param AuthenticatorData $authenticatorData
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkRecoveryCode($pin, AuthenticatorData $authenticatorData)
     {
@@ -172,7 +183,7 @@ final class AuthenticatorController extends SimpleControllerBase
      * @param AuthenticatorData $authenticatorData
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkPin($pin, AuthenticatorData $authenticatorData)
     {
@@ -193,13 +204,13 @@ final class AuthenticatorController extends SimpleControllerBase
      * @param AuthenticatorData $authenticatorData
      *
      * @return bool
-     * @throws \Defuse\Crypto\Exception\CryptoException
-     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\NoSuchPropertyException
-     * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
-     * @throws \SP\Services\ServiceException
+     * @throws CryptoException
+     * @throws EnvironmentIsBrokenException
+     * @throws ConstraintException
+     * @throws NoSuchPropertyException
+     * @throws QueryException
+     * @throws NoSuchItemException
+     * @throws ServiceException
      */
     private function save2FAStatus(AuthenticatorData $authenticatorData)
     {
@@ -216,6 +227,15 @@ final class AuthenticatorController extends SimpleControllerBase
 
             $this->plugin->saveData($this->userData->getId(), $authenticatorData);
 
+            $this->eventDispatcher->notifyEvent('authenticator.edit.enable',
+                new Event($this, EventMessage::factory()
+                    ->addDescription(_t('authenticator', '2FA Enabled'))
+                    ->addDetail(__('User'), $this->userData->getLogin())
+                    ->addExtra('userId', $this->userData->getId())
+                    ->addExtra('expireDays', $authenticatorData->getExpireDays())
+                )
+            );
+
             return $this->returnJsonResponse(
                 JsonResponse::JSON_SUCCESS,
                 _t('authenticator', '2FA Enabled')
@@ -226,6 +246,14 @@ final class AuthenticatorController extends SimpleControllerBase
             && $enable === false
         ) {
             $this->authenticatorService->deletePluginUserData($this->userData->getId());
+
+            $this->eventDispatcher->notifyEvent('authenticator.edit.disable',
+                new Event($this, EventMessage::factory()
+                    ->addDescription(_t('authenticator', '2FA Disabled'))
+                    ->addDetail(__('User'), $this->userData->getLogin())
+                    ->addExtra('userId', $this->userData->getId())
+                )
+            );
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_SUCCESS,
@@ -298,7 +326,7 @@ final class AuthenticatorController extends SimpleControllerBase
                 JsonResponse::JSON_ERROR,
                 $e->getMessage()
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             processException($e);
 
             $this->eventDispatcher->notifyEvent('exception', new Event($e));
@@ -335,13 +363,21 @@ final class AuthenticatorController extends SimpleControllerBase
                         $this->userData->getEmail(),
                         $message);
 
+                $this->eventDispatcher->notifyEvent('authenticator.send.recoverycode',
+                    new Event($this, EventMessage::factory()
+                        ->addDescription(_t('authenticator', '2FA Code Recovery'))
+                        ->addDetail(__('User'), $this->userData->getLogin())
+                        ->addExtra('userId', $this->userData->getId())
+                    )
+                );
+
                 return true;
             }
 
             return false;
         } catch (AuthenticatorException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             processException($e);
 
             $this->eventDispatcher->notifyEvent('exception', new Event($e));
@@ -367,7 +403,10 @@ final class AuthenticatorController extends SimpleControllerBase
             if (count($codes) > 0) {
                 $this->eventDispatcher->notifyEvent('authenticator.show.recoverycode',
                     new Event($this, EventMessage::factory()
-                        ->addDescription(_t('authenticator', 'Recovery codes displayed')))
+                        ->addDescription(_t('authenticator', 'Recovery codes displayed'))
+                        ->addDetail(__('User'), $this->userData->getLogin())
+                        ->addExtra('userId', $this->userData->getId())
+                    )
                 );
 
                 return $this->returnJsonResponseData($codes);
@@ -377,7 +416,7 @@ final class AuthenticatorController extends SimpleControllerBase
                     _t('authenticator', 'There aren\'t any recovery codes available')
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             processException($e);
 
             $this->eventDispatcher->notifyEvent('exception', new Event($e));
@@ -398,9 +437,9 @@ final class AuthenticatorController extends SimpleControllerBase
     }
 
     /**
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \SP\Core\Exceptions\InvalidArgumentException
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws InvalidArgumentException
      */
     protected function initialize()
     {

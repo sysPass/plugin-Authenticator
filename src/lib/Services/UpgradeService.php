@@ -2,8 +2,8 @@
 /**
  * sysPass
  *
- * @author nuxsmin
- * @link https://syspass.org
+ * @author    nuxsmin
+ * @link      https://syspass.org
  * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
  *
  * This file is part of sysPass.
@@ -24,6 +24,7 @@
 
 namespace SP\Modules\Web\Plugins\Authenticator\Services;
 
+use Exception;
 use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
 use SP\Plugin\PluginOperation;
 use SP\Repositories\Plugin\PluginModel;
@@ -66,7 +67,7 @@ final class UpgradeService
                 foreach ($authenticatorData as $item) {
                     try {
                         $this->pluginOperation->create($item->getUserId(), $item);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         processException($e);
                     }
                 }

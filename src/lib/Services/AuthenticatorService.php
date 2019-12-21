@@ -2,8 +2,8 @@
 /**
  * sysPass
  *
- * @author nuxsmin
- * @link https://syspass.org
+ * @author    nuxsmin
+ * @link      https://syspass.org
  * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
  *
  * This file is part of sysPass.
@@ -27,17 +27,25 @@ namespace SP\Modules\Web\Plugins\Authenticator\Services;
 use BaconQrCode\Renderer\Image\Png;
 use BaconQrCode\Writer;
 use Base2n;
+use Defuse\Crypto\Exception\CryptoException;
 use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use SP\Core\Exceptions\CheckException;
+use SP\Core\Exceptions\ConstraintException;
+use SP\Core\Exceptions\NoSuchPropertyException;
+use SP\Core\Exceptions\QueryException;
 use SP\Core\PhpExtensionChecker;
 use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
 use SP\Modules\Web\Plugins\Authenticator\Plugin;
 use SP\Modules\Web\Plugins\Authenticator\Util\Google2FA;
 use SP\Plugin\PluginManager;
+use SP\Repositories\NoSuchItemException;
 use SP\Services\Service;
+use SP\Services\ServiceException;
 use SP\Util\PasswordUtil;
+use stdClass;
 
 defined('APP_ROOT') || die();
 
@@ -85,7 +93,7 @@ final class AuthenticatorService extends Service
      * @param string $iv
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function verifyKey(string $key, string $iv)
     {
@@ -99,7 +107,7 @@ final class AuthenticatorService extends Service
      * @param string $iv
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function checkUserToken(string $userToken, string $iv)
     {
@@ -209,27 +217,10 @@ final class AuthenticatorService extends Service
     }
 
     /**
-     * @param array             $codes
-     * @param AuthenticatorData $authenticatorData
-     *
-     * @throws \Defuse\Crypto\Exception\CryptoException
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\NoSuchPropertyException
-     * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Services\ServiceException
-     */
-    private function saveRecoveryCodes(array $codes, AuthenticatorData $authenticatorData)
-    {
-        $authenticatorData->setRecoveryCodes($codes);
-        $authenticatorData->setLastRecoveryTime(time());
-        $this->plugin->saveData($authenticatorData->getUserId(), $authenticatorData);
-    }
-
-    /**
      * Generar códigos de recuperación
      *
      * @return array
-     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
+     * @throws EnvironmentIsBrokenException
      */
     public function generateRecoveryCodes()
     {
@@ -250,9 +241,9 @@ final class AuthenticatorService extends Service
      * @param int $id
      *
      * @return void
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
+     * @throws ConstraintException
+     * @throws QueryException
+     * @throws NoSuchItemException
      * @internal param AuthenticatorData $AuthenticatorData
      */
     public function deletePluginUserData($id)
@@ -277,7 +268,7 @@ final class AuthenticatorService extends Service
                 $data = $request->getBody();
 
                 if (isset($data->{$pluginName})) {
-                    $out = new \stdClass();
+                    $out = new stdClass();
                     $out->plugin = $pluginName;
                     $out->remoteVersion = $data->{$pluginName}->version;
                     $out->localVersion = implode('.', $this->plugin->getVersion());
@@ -302,11 +293,11 @@ final class AuthenticatorService extends Service
      * @param string            $code
      *
      * @return bool
-     * @throws \Defuse\Crypto\Exception\CryptoException
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\NoSuchPropertyException
-     * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Services\ServiceException
+     * @throws CryptoException
+     * @throws ConstraintException
+     * @throws NoSuchPropertyException
+     * @throws QueryException
+     * @throws ServiceException
      */
     public function useRecoveryCode(AuthenticatorData $authenticatorData, $code)
     {
@@ -327,6 +318,23 @@ final class AuthenticatorService extends Service
         }
 
         return false;
+    }
+
+    /**
+     * @param array             $codes
+     * @param AuthenticatorData $authenticatorData
+     *
+     * @throws CryptoException
+     * @throws ConstraintException
+     * @throws NoSuchPropertyException
+     * @throws QueryException
+     * @throws ServiceException
+     */
+    private function saveRecoveryCodes(array $codes, AuthenticatorData $authenticatorData)
+    {
+        $authenticatorData->setRecoveryCodes($codes);
+        $authenticatorData->setLastRecoveryTime(time());
+        $this->plugin->saveData($authenticatorData->getUserId(), $authenticatorData);
     }
 
     protected function initialize()

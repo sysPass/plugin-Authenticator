@@ -2,8 +2,8 @@
 /**
  * sysPass
  *
- * @author nuxsmin
- * @link https://syspass.org
+ * @author    nuxsmin
+ * @link      https://syspass.org
  * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
  *
  * This file is part of sysPass.
@@ -24,10 +24,15 @@
 
 namespace SP\Modules\Web\Plugins\Authenticator;
 
+use Exception;
 use Psr\Container\ContainerInterface;
+use SP\Core\Context\ContextException;
 use SP\Core\Context\ContextInterface;
 use SP\Core\Context\SessionContext;
 use SP\Core\Events\Event;
+use SP\Core\Exceptions\ConstraintException;
+use SP\Core\Exceptions\InvalidClassException;
+use SP\Core\Exceptions\QueryException;
 use SP\Core\UI\ThemeInterface;
 use SP\Modules\Web\Plugins\Authenticator\Controllers\PreferencesController;
 use SP\Modules\Web\Plugins\Authenticator\Models\AuthenticatorData;
@@ -36,6 +41,7 @@ use SP\Modules\Web\Plugins\Authenticator\Util\PluginContext;
 use SP\Mvc\Controller\ExtensibleTabControllerInterface;
 use SP\Plugin\PluginBase;
 use SP\Plugin\PluginOperation;
+use SP\Repositories\NoSuchItemException;
 use SplSubject;
 
 /**
@@ -97,8 +103,8 @@ class Plugin extends PluginBase
      * @param string $eventType Nombre del evento
      * @param Event  $event     Objeto del evento
      *
-     * @throws \SP\Core\Exceptions\InvalidClassException
-     * @throws \Exception
+     * @throws InvalidClassException
+     * @throws Exception
      */
     public function updateEvent($eventType, Event $event)
     {
@@ -128,7 +134,7 @@ class Plugin extends PluginBase
                 $this->session->getUserData()->getId(),
                 AuthenticatorData::class
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             processException($e);
         }
     }
@@ -138,7 +144,7 @@ class Plugin extends PluginBase
      *
      * @param Event $event
      *
-     * @throws \SP\Core\Context\ContextException
+     * @throws ContextException
      */
     private function checkLogin(Event $event)
     {
@@ -217,7 +223,7 @@ class Plugin extends PluginBase
      */
     public function getVersion()
     {
-        return [2, 1, 0];
+        return [2, 1, 1];
     }
 
     /**
@@ -255,9 +261,9 @@ class Plugin extends PluginBase
      *
      * @param $id
      *
-     * @throws \SP\Core\Exceptions\ConstraintException
-     * @throws \SP\Core\Exceptions\QueryException
-     * @throws \SP\Repositories\NoSuchItemException
+     * @throws ConstraintException
+     * @throws QueryException
+     * @throws NoSuchItemException
      */
     public function deleteDataForId($id)
     {

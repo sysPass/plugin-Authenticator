@@ -2,8 +2,8 @@
 /**
  * sysPass
  *
- * @author nuxsmin
- * @link https://syspass.org
+ * @author    nuxsmin
+ * @link      https://syspass.org
  * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
  *
  * This file is part of sysPass.
@@ -47,6 +47,7 @@ class PluginContext
 
     /**
      * Session constructor.
+     *
      * @param ContextInterface $context
      */
     public function __construct(ContextInterface $context)
