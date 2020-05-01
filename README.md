@@ -34,6 +34,12 @@ Please select the installation method depending on the instance type:
 
 * If you are running a **non-Docker** based instance:
 
+Before plugin installation install some libs:
+
+```composer require phpseclib/phpseclib php-di/php-di```
+
+Then install plugin
+
 ```composer require syspass/plugin-authenticator:^v2.0```
 
 * If you are running a **Docker** based instance, set `syspass/plugin-authenticator:^v2.0` value within an environment variable called `COMPOSER_EXTENSIONS`.
