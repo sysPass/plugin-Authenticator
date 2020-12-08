@@ -71,9 +71,9 @@ class AuthenticatorData
     public $lastRecoveryTime = 0;
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return (int)$this->userId;
     }
@@ -89,23 +89,23 @@ class AuthenticatorData
     /**
      * @return bool
      */
-    public function isTwofaEnabled()
+    public function isTwofaEnabled(): bool
     {
         return (bool)$this->twofaEnabled;
     }
 
     /**
-     * @param int $twofaEnabled
+     * @param bool $twofaEnabled
      */
-    public function setTwofaEnabled($twofaEnabled)
+    public function setTwofaEnabled(bool $twofaEnabled)
     {
         $this->twofaEnabled = (int)$twofaEnabled;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDate()
+    public function getDate(): ?int
     {
         return $this->date;
     }
@@ -113,15 +113,15 @@ class AuthenticatorData
     /**
      * @param int $date
      */
-    public function setDate($date)
+    public function setDate(int $date)
     {
         $this->date = $date;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getExpireDays()
+    public function getExpireDays(): ?int
     {
         return $this->expireDays;
     }
@@ -129,31 +129,31 @@ class AuthenticatorData
     /**
      * @param int $expireDays
      */
-    public function setExpireDays($expireDays)
+    public function setExpireDays(int $expireDays)
     {
         $this->expireDays = $expireDays;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIV()
+    public function getIV(): ?string
     {
         return $this->IV;
     }
 
     /**
-     * @param string $IV
+     * @param string $iv
      */
-    public function setIV($IV)
+    public function setIV(string $iv)
     {
-        $this->IV = $IV;
+        $this->IV = $iv;
     }
 
     /**
      * @return array
      */
-    public function getRecoveryCodes()
+    public function getRecoveryCodes(): array
     {
         return $this->recoveryCodes;
     }
@@ -169,7 +169,7 @@ class AuthenticatorData
     /**
      * @return int
      */
-    public function getLastRecoveryTime()
+    public function getLastRecoveryTime(): int
     {
         return $this->lastRecoveryTime;
     }
@@ -177,7 +177,7 @@ class AuthenticatorData
     /**
      * @param int $lastRecoveryTime
      */
-    public function setLastRecoveryTime($lastRecoveryTime)
+    public function setLastRecoveryTime(int $lastRecoveryTime)
     {
         $this->lastRecoveryTime = $lastRecoveryTime;
     }

@@ -86,9 +86,9 @@ final class AuthenticatorController extends SimpleControllerBase
     private $plugin;
 
     /**
-     * Guardar los datos del plugin
+     * Save plugin's data
      */
-    public function saveAction()
+    public function saveAction(): bool
     {
         try {
             $pin = $this->request->analyzeString('pin');
@@ -162,7 +162,7 @@ final class AuthenticatorController extends SimpleControllerBase
      * @return bool
      * @throws Exception
      */
-    private function checkRecoveryCode($pin, AuthenticatorData $authenticatorData)
+    private function checkRecoveryCode(string $pin, AuthenticatorData $authenticatorData): bool
     {
         if (strlen($pin) === 20
             && $this->authenticatorService->useRecoveryCode($authenticatorData, $pin)
@@ -185,7 +185,7 @@ final class AuthenticatorController extends SimpleControllerBase
      * @return bool
      * @throws Exception
      */
-    private function checkPin($pin, AuthenticatorData $authenticatorData)
+    private function checkPin(string $pin, AuthenticatorData $authenticatorData): bool
     {
         if (empty($pin)
             || AuthenticatorService::verifyKey($pin, $authenticatorData->getIV()) === false
@@ -212,7 +212,7 @@ final class AuthenticatorController extends SimpleControllerBase
      * @throws NoSuchItemException
      * @throws ServiceException
      */
-    private function save2FAStatus(AuthenticatorData $authenticatorData)
+    private function save2FAStatus(AuthenticatorData $authenticatorData): bool
     {
         $enable = $this->request->analyzeBool('2faenabled', false);
 
@@ -270,7 +270,7 @@ final class AuthenticatorController extends SimpleControllerBase
     /**
      * Comprobar el código 2FA
      */
-    public function checkCodeAction()
+    public function checkCodeAction(): bool
     {
         try {
             $pin = $this->request->analyzeString('pin');
@@ -346,7 +346,7 @@ final class AuthenticatorController extends SimpleControllerBase
      * @return bool
      * @throws AuthenticatorException
      */
-    private function sendResetEmail(AuthenticatorData $authenticatorData)
+    private function sendResetEmail(AuthenticatorData $authenticatorData): bool
     {
         try {
             if (!empty($this->userData->getEmail())) {
@@ -389,7 +389,7 @@ final class AuthenticatorController extends SimpleControllerBase
     /**
      * Mostrar códigos de recuperación
      */
-    public function showRecoveryCodesAction()
+    public function showRecoveryCodesAction(): bool
     {
         try {
             $authenticatorData = $this->plugin->getData();
@@ -431,7 +431,7 @@ final class AuthenticatorController extends SimpleControllerBase
     /**
      * @return bool
      */
-    public function checkVersionAction()
+    public function checkVersionAction(): bool
     {
         return $this->returnJsonResponseData($this->authenticatorService->checkVersion());
     }

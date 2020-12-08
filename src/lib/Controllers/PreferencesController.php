@@ -98,7 +98,7 @@ final class PreferencesController
      *
      * @return DataTab
      */
-    protected function getSecurityTab()
+    protected function getSecurityTab(): DataTab
     {
         $base = $this->plugin->getThemeDir() . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'userpreferences';
 

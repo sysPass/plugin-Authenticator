@@ -60,7 +60,7 @@ class PluginContext
      *
      * @return AuthenticatorData
      */
-    public function getUserData()
+    public function getUserData(): AuthenticatorData
     {
         return $this->context->getPluginKey(self::CONTEXT_KEY, self::USERDATA);
     }
@@ -70,7 +70,7 @@ class PluginContext
      *
      * @return bool
      */
-    public function getTwoFApass()
+    public function getTwoFApass(): bool
     {
         return $this->context->getPluginKey(self::CONTEXT_KEY, self::TWOFA_PASS);
     }
@@ -90,7 +90,7 @@ class PluginContext
      *
      * @param bool $pass
      */
-    public function setTwoFApass($pass)
+    public function setTwoFApass(bool $pass)
     {
         $this->context->setPluginKey(self::CONTEXT_KEY, self::TWOFA_PASS, $pass);
     }

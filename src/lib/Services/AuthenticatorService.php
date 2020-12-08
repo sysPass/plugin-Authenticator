@@ -71,7 +71,7 @@ final class AuthenticatorService extends Service
      * @return string
      * @throws EnvironmentIsBrokenException
      */
-    public static function makeInitializationKey()
+    public static function makeInitializationKey(): string
     {
         $iv = PasswordUtil::generateRandomBytes(32);
 
@@ -95,7 +95,7 @@ final class AuthenticatorService extends Service
      * @return bool
      * @throws Exception
      */
-    public static function verifyKey(string $key, string $iv)
+    public static function verifyKey(string $key, string $iv): bool
     {
         return Google2FA::verify_key($iv, $key);
     }
@@ -109,7 +109,7 @@ final class AuthenticatorService extends Service
      * @return bool
      * @throws Exception
      */
-    public static function checkUserToken(string $userToken, string $iv)
+    public static function checkUserToken(string $userToken, string $iv): bool
     {
         $totp = Google2FA::oath_totp(
             Google2FA::base32_decode($iv),
@@ -126,6 +126,7 @@ final class AuthenticatorService extends Service
      * @param string $iv
      *
      * @return bool
+     * @throws CheckException
      */
     public function getQrCodeFromUrl(string $login, string $iv)
     {
@@ -144,8 +145,6 @@ final class AuthenticatorService extends Service
             }
         } catch (GuzzleException $e) {
             processException($e);
-        } catch (CheckException $e) {
-            processException($e);
         }
 
         return false;
@@ -159,7 +158,7 @@ final class AuthenticatorService extends Service
      *
      * @return string
      */
-    public function getUserQRUrl(string $login, string $iv)
+    public function getUserQRUrl(string $login, string $iv): string
     {
         $qrUrl = 'https://www.google.com/chart?chs=150x150&chld=M|0&cht=qr&chl=';
         $qrUrl .= urlencode('otpauth://totp/sysPass:syspass/' . $login . '?secret=' . $iv . '&issuer=sysPass');
@@ -175,7 +174,7 @@ final class AuthenticatorService extends Service
      *
      * @return string
      */
-    public function getQrCodeFromServer(string $login, string $iv)
+    public function getQrCodeFromServer(string $login, string $iv): string
     {
         $renderer = new Png();
         $renderer->setHeight(200);
@@ -194,7 +193,7 @@ final class AuthenticatorService extends Service
      * @throws AuthenticatorException
      * @throws EnvironmentIsBrokenException
      */
-    public function pickRecoveryCode(AuthenticatorData $authenticatorData)
+    public function pickRecoveryCode(AuthenticatorData $authenticatorData): string
     {
         $recoveryTime = $authenticatorData->getLastRecoveryTime();
         $codes = $authenticatorData->getRecoveryCodes();
@@ -222,7 +221,7 @@ final class AuthenticatorService extends Service
      * @return array
      * @throws EnvironmentIsBrokenException
      */
-    public function generateRecoveryCodes()
+    public function generateRecoveryCodes(): array
     {
         $codes = [];
         $i = 1;
@@ -246,7 +245,7 @@ final class AuthenticatorService extends Service
      * @throws NoSuchItemException
      * @internal param AuthenticatorData $AuthenticatorData
      */
-    public function deletePluginUserData($id)
+    public function deletePluginUserData(int $id)
     {
         $this->plugin->deleteDataForId($id);
     }
@@ -279,8 +278,6 @@ final class AuthenticatorService extends Service
             }
         } catch (GuzzleException $e) {
             processException($e);
-        } catch (CheckException $e) {
-            processException($e);
         }
 
         return false;
@@ -299,7 +296,7 @@ final class AuthenticatorService extends Service
      * @throws QueryException
      * @throws ServiceException
      */
-    public function useRecoveryCode(AuthenticatorData $authenticatorData, $code)
+    public function useRecoveryCode(AuthenticatorData $authenticatorData, string $code): bool
     {
         $codes = $authenticatorData->getRecoveryCodes();
         $usedKey = array_search($code, $codes, true);
