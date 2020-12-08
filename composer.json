@@ -19,7 +19,7 @@
     "docs": "https://doc.syspass.org"
   },
   "require": {
-    "syspass/extension-installer-plugin": "^2.0",
+    "syspass/extension-installer-plugin": "dev-develop",
     "php": "~7.2 || ~7.3 || ~7.4",
     "bacon/bacon-qr-code": "^2.0",
     "ext-gettext": "*"

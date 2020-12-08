@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05d912aa14cc5495001b9b21cd086009",
+    "content-hash": "f46d434cac2c3811cabb92379c0bdb71",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -108,16 +108,16 @@
         },
         {
             "name": "syspass/extension-installer-plugin",
-            "version": "v2.0.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sysPass/composer-plugin-installer.git",
-                "reference": "9805ed94f0eac986c8c35586ca3b682e28a7c465"
+                "reference": "42b21f70192c2a45d93c40d84d7abb414661d8b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sysPass/composer-plugin-installer/zipball/9805ed94f0eac986c8c35586ca3b682e28a7c465",
-                "reference": "9805ed94f0eac986c8c35586ca3b682e28a7c465",
+                "url": "https://api.github.com/repos/sysPass/composer-plugin-installer/zipball/42b21f70192c2a45d93c40d84d7abb414661d8b6",
+                "reference": "42b21f70192c2a45d93c40d84d7abb414661d8b6",
                 "shasum": ""
             },
             "require": {
@@ -141,15 +141,17 @@
             ],
             "support": {
                 "issues": "https://github.com/sysPass/composer-plugin-installer/issues",
-                "source": "https://github.com/sysPass/composer-plugin-installer/tree/v2.0.0"
+                "source": "https://github.com/sysPass/composer-plugin-installer/tree/develop"
             },
-            "time": "2020-12-08T08:15:22+00:00"
+            "time": "2020-12-08T08:11:06+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "syspass/extension-installer-plugin": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
