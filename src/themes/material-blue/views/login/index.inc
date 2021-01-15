@@ -12,14 +12,15 @@
               data-onsubmit="twofa/check"
               data-plugin="Authenticator"
               data-action-route="<?php echo $_getvar('route'); ?>"
-              data-hash="">
+              data-hash=""
+              autocomplete="off">
             <fieldset id="resetdata">
                 <legend><?php echo _t('authenticator', 'Two Factor Authentication'); ?></legend>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="pin" name="pin" type="text"
                            pattern="([0-9]{6}|[0-9a-f]{20})"
                            class="mdl-textfield__input mdl-color-text--indigo-400"
-                           maxlength="20"/>
+                           maxlength="20" autofocus/>
                     <label class="mdl-textfield__label"
                            for="pin"><?php echo _t('authenticator', 'Enter code'); ?></label>
                 </div>
