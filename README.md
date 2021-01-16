@@ -6,8 +6,11 @@ Plugin to use two factor based authentication with applications that generate TO
 
 Please, select the correct branch in order to download a sysPass compatible version:
 
-* sysPass v3: Master branch or 2.0
-* sysPass v2: 1.0 branch 
+|sysPass version|Plugin's version|Branch|
+|:-------------:|:--------------:|:----:|
+|v3.2           |v2.2            |master &#x7c;&#x7c; v2.2|
+|v3.0 <= v3.1   |v2.1            |v2.1|
+|v2.0 < v3.0    |v1.0            |v1.0|
 
 ---
 
