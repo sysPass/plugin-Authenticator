@@ -2,8 +2,8 @@
 /**
  * sysPass
  *
- * @author nuxsmin
- * @link https://syspass.org
+ * @author    nuxsmin
+ * @link      https://syspass.org
  * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
  *
  * This file is part of sysPass.
@@ -24,12 +24,16 @@
 
 namespace SP\Modules\Web\Controllers;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use SP\Core\Events\Event;
 use SP\Core\Events\EventMessage;
+use SP\Core\Exceptions\SessionTimeout;
 use SP\Modules\Web\Controllers\Helpers\LayoutHelper;
 use SP\Modules\Web\Controllers\Traits\JsonTrait;
 use SP\Modules\Web\Plugins\Authenticator\Plugin;
 use SP\Plugin\PluginManager;
+use SP\Services\Auth\AuthException;
 
 /**
  * Class LoginController
@@ -50,11 +54,11 @@ final class AuthenticatorLoginController extends ControllerBase
     /**
      * Obtener los datos para el interface de autentificación en 2 pasos
      *
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \SP\Core\Exceptions\SessionTimeout
-     * @throws \SP\Services\Auth\AuthException
-     * @throws \SP\Core\Exceptions\SessionTimeout
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws SessionTimeout
+     * @throws AuthException
+     * @throws SessionTimeout
      */
     public function indexAction()
     {
@@ -96,23 +100,31 @@ final class AuthenticatorLoginController extends ControllerBase
         $timeRemaining = $expireTime - time();
 
         if ($timeRemaining <= self::WARNING_TIME) {
-            $this->eventDispatcher->notifyEvent('authenticator.expiry.notice',
+            $this->eventDispatcher->notifyEvent('authenticator.expiry.warn',
                 new Event($this, EventMessage::factory()
                     ->addDescription(_t('authenticator', 'Expire Notice'))
-                    ->addDescription(sprintf(_t('authenticator', 'The 2FA code will need to be reset within %d days'), $timeRemaining / 86400)))
+                    ->addDescription(sprintf(_t('authenticator',
+                        'The 2FA code will need to be reset within %d days'), $timeRemaining / 86400))
+                    ->addDetail(__('User'), $this->userData->getLogin())
+                    ->addExtra('userId', $this->userData->getId())
+                )
             );
         } elseif (time() > $expireTime) {
-            $this->eventDispatcher->notifyEvent('authenticator.expiry.notice',
+            $this->eventDispatcher->notifyEvent('authenticator.expiry.expired',
                 new Event($this, EventMessage::factory()
                     ->addDescription(_t('authenticator', 'Expire Notice'))
-                    ->addDescription(_t('authenticator', 'The 2FA code is expired. You need to reset it on preferences tab')))
+                    ->addDescription(_t('authenticator',
+                        'The 2FA code is expired. You need to reset it on preferences tab'))
+                    ->addDetail(__('User'), $this->userData->getLogin())
+                    ->addExtra('userId', $this->userData->getId())
+                )
             );
         }
     }
 
     /**
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function initialize()
     {

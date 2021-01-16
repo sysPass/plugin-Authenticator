@@ -2,8 +2,8 @@
 /**
  * sysPass
  *
- * @author nuxsmin
- * @link https://syspass.org
+ * @author    nuxsmin
+ * @link      https://syspass.org
  * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
  *
  * This file is part of sysPass.
@@ -22,6 +22,11 @@
  *  along with sysPass.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use Composer\Autoload\ClassLoader;
+use SP\Modules\Web\Controllers\AuthenticatorController;
+use SP\Modules\Web\Controllers\AuthenticatorLoginController;
+use SP\Modules\Web\Plugins\Authenticator\Plugin;
+
 $lib = __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'lib';
 
 $base = [
@@ -29,13 +34,13 @@ $base = [
     'dir' => $lib
 ];
 
-if (!class_exists(\SP\Modules\Web\Plugins\Authenticator\Plugin::class)) {
-    /** @var \Composer\Autoload\ClassLoader $loader */
+if (!class_exists(Plugin::class)) {
+    /** @var ClassLoader $loader */
     $loader = require APP_ROOT . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
     $loader->addPsr4($base['namespace'], $base['dir']);
     $loader->addClassMap([
-        \SP\Modules\Web\Controllers\AuthenticatorController::class => $lib . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . 'AuthenticatorController.php',
-        \SP\Modules\Web\Controllers\AuthenticatorLoginController::class => $lib . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . 'AuthenticatorLoginController.php'
+        AuthenticatorController::class => $lib . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . 'AuthenticatorController.php',
+        AuthenticatorLoginController::class => $lib . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . 'AuthenticatorLoginController.php'
     ]);
 }
 

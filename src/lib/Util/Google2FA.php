@@ -1,28 +1,5 @@
 <?php
 /**
- * sysPass
- *
- * @author nuxsmin
- * @link https://syspass.org
- * @copyright 2012-2019, Rubén Domínguez nuxsmin@$syspass.org
- *
- * This file is part of sysPass.
- *
- * sysPass is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * sysPass is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- *  along with sysPass.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -45,6 +22,8 @@
  **/
 
 namespace SP\Modules\Web\Plugins\Authenticator\Util;
+
+use Exception;
 
 /**
  * Class Google2FA
@@ -92,7 +71,7 @@ class Google2FA
      * @param int $length
      * @return string
      */
-    public static function generate_secret_key($length = 16)
+    public static function generate_secret_key($length = 16): string
     {
         $b32 = '234567QWERTYUIOPASDFGHJKLZXCVBNM';
         $s = '';
@@ -108,14 +87,15 @@ class Google2FA
      * Verifys a user inputted key against the current timestamp. Checks $window
      * keys either side of the timestamp.
      *
-     * @param string $b32seed
-     * @param string $key - User specified key
+     * @param string  $b32seed
+     * @param string  $key - User specified key
      * @param integer $window
      * @param boolean $useTimeStamp
+     *
      * @return boolean
-     * @throws \Exception
-     **/
-    public static function verify_key($b32seed, $key, $window = 4, $useTimeStamp = true)
+     * @throws Exception
+     */
+    public static function verify_key(string $b32seed, string $key, $window = 4, $useTimeStamp = true): bool
     {
 
         $timeStamp = ($useTimeStamp !== true) ? (int)$useTimeStamp : self::get_timestamp();
@@ -133,12 +113,12 @@ class Google2FA
     }
 
     /**
-     * Returns the current Unix Timestamp devided by the keyRegeneration
+     * Returns the current Unix Timestamp divided by the keyRegeneration
      * period.
      *
      * @return integer
      **/
-    public static function get_timestamp()
+    public static function get_timestamp(): int
     {
         return floor(microtime(true) / self::keyRegeneration);
     }
@@ -146,15 +126,18 @@ class Google2FA
     /**
      * Decodes a base32 string into a binary string.
      *
-     * @throws \Exception
+     * @param $b32
+     *
+     * @return string
+     * @throws Exception
      */
-    public static function base32_decode($b32)
+    public static function base32_decode($b32): string
     {
 
         $b32 = strtoupper($b32);
 
         if (!preg_match('/^[ABCDEFGHIJKLMNOPQRSTUVWXYZ234567]+$/', $b32, $match)) {
-            throw new \Exception('Invalid characters in the base32 string.');
+            throw new Exception('Invalid characters in the base32 string.');
         }
 
         $l = strlen($b32);
@@ -180,15 +163,16 @@ class Google2FA
      * Takes the secret key and the timestamp and returns the one time
      * password.
      *
-     * @param string $key - Secret key in binary form.
-     * @param int $counter - Timestamp as returned by get_timestamp.
+     * @param string $key     - Secret key in binary form.
+     * @param int    $counter - Timestamp as returned by get_timestamp.
+     *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function oath_totp($key, $counter)
+    public static function oath_totp(string $key, int $counter): string
     {
         if (strlen($key) < 8) {
-            throw new \Exception('Secret key is too short. Must be at least 16 base 32 characters');
+            throw new Exception('Secret key is too short. Must be at least 16 base 32 characters');
         }
 
         $bin_counter = pack('N*', 0) . pack('N*', $counter); // Counter must be 64-bit int
@@ -201,9 +185,10 @@ class Google2FA
      * Extracts the OTP from the SHA1 hash.
      *
      * @param string $hash
+     *
      * @return integer
-     **/
-    public static function oath_truncate($hash)
+     */
+    public static function oath_truncate(string $hash): int
     {
         $offset = ord($hash[19]) & 0xf;
 
