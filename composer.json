@@ -20,7 +20,7 @@
   },
   "require": {
     "syspass/extension-installer-plugin": "^2.0",
-    "php": "~7.2 || ~7.3 || ~7.4",
+    "php": "~7.3 || ~7.4",
     "bacon/bacon-qr-code": "^2.0",
     "ext-gettext": "*"
   },

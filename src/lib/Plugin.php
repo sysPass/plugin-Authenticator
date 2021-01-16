@@ -223,7 +223,7 @@ class Plugin extends PluginBase
      */
     public function getVersion()
     {
-        return [2, 1, 1];
+        return [2, 2, 1];
     }
 
     /**
@@ -233,7 +233,7 @@ class Plugin extends PluginBase
      */
     public function getCompatibleVersion()
     {
-        return [3, 1];
+        return [3, 2];
     }
 
     /**
