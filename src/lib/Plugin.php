@@ -209,9 +209,9 @@ class Plugin extends PluginBase
     /**
      * Devuelve el autor del plugin
      *
-     * @return string
+     * @return string|null
      */
-    public function getAuthor()
+    public function getAuthor(): ?string
     {
         return 'Rubén D.';
     }
@@ -219,19 +219,19 @@ class Plugin extends PluginBase
     /**
      * Devuelve la versión del plugin
      *
-     * @return array
+     * @return array|null
      */
-    public function getVersion()
+    public function getVersion(): ?array
     {
-        return [2, 2, 1];
+        return [2, 2, 2];
     }
 
     /**
      * Devuelve la versión compatible de sysPass
      *
-     * @return array
+     * @return array|null
      */
-    public function getCompatibleVersion()
+    public function getCompatibleVersion(): ?array
     {
         return [3, 2];
     }
@@ -249,9 +249,9 @@ class Plugin extends PluginBase
     /**
      * Devuelve el nombre del plugin
      *
-     * @return string
+     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return self::PLUGIN_NAME;
     }

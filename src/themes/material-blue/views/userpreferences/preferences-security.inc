@@ -50,7 +50,7 @@ $chk2FAEnabled = $_getvar('chk2FAEnabled');
 
                     if (!$chk2FAEnabled && $qrCode): ?>
                         <div id="qr_code">
-                            <img id="qrcode" src="data:image/gif;base64,<?php echo $qrCode; ?>" alt="QR Code"/>
+                            <img id="qrcode" src="data:image/svg+xml;base64,<?php echo $qrCode; ?>" alt="QR Code"/>
                         </div>
                     <?php elseif ($qrCode === false): ?>
                         <p class="ui-state-error"><?php echo _t('authenticator', 'Error while getting the QR code. Please, try it again'); ?></p>
