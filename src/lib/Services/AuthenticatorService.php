@@ -163,7 +163,7 @@ final class AuthenticatorService extends Service
      */
     public function getUserQRUrl(string $login, string $iv): string
     {
-        $qrUrl = 'https://www.google.com/chart?chs=150x150&chld=M|0&cht=qr&chl=';
+        $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=';
         $qrUrl .= urlencode('otpauth://totp/sysPass:syspass/' . $login . '?secret=' . $iv . '&issuer=sysPass');
 
         return $qrUrl;
