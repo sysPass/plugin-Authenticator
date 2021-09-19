@@ -1,0 +1,170 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Authenticator\n"
+"POT-Creation-Date: 2021-09-19 09:44+0300\n"
+"PO-Revision-Date: 2021-09-19 10:07+0300\n"
+"Last-Translator: Fernand0S <github.com/Fernand0S>\n"
+"Language-Team: github.com/Fernand0S\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ../../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-KeywordsList: _t:2\n"
+"X-Poedit-SearchPath-0: lib\n"
+"X-Poedit-SearchPath-1: themes\n"
+
+#: lib/Controllers/AuthenticatorController.php:96
+msgid "Ei, isso é uma demonstração!!"
+msgstr "Ei, isso é uma demonstração!!"
+
+#: lib/Controllers/AuthenticatorController.php:116
+#: lib/Controllers/AuthenticatorController.php:300
+msgid "Código Inválido"
+msgstr "Código Inválido"
+
+#: lib/Controllers/AuthenticatorController.php:162
+msgid "Código de Recuperação utilizado"
+msgstr "Código de Recuperação utilizado"
+
+#: lib/Controllers/AuthenticatorController.php:221
+msgid "Habilitar 2FA"
+msgstr "Habilitar 2FA"
+
+#: lib/Controllers/AuthenticatorController.php:232
+msgid "Habilitar 2FA"
+msgstr "Habilitar 2FA"
+
+#: lib/Controllers/AuthenticatorController.php:276
+msgid "E-mail de recuperação foi enviado"
+msgstr "E-mail de recuperação foi enviado"
+
+#: lib/Controllers/AuthenticatorController.php:292
+msgid "Código correto"
+msgstr "Código correto"
+
+#: lib/Controllers/AuthenticatorController.php:334
+#: lib/Controllers/AuthenticatorController.php:340
+msgid "Código de Recuperação 2FA"
+msgstr "Código de Recuperação 2FA"
+
+#: lib/Controllers/AuthenticatorController.php:335
+msgid "Foi solicitado um código de recuperação 2FA."
+msgstr "Foi solicitado um código de recuperação 2FA."
+
+#: lib/Controllers/AuthenticatorController.php:337
+#, php-format
+msgid "O código de recuperação é: %s"
+msgstr "O código de recuperação é: %s"
+
+#: lib/Controllers/AuthenticatorController.php:374
+msgid "Códigos de recuperação exibidos"
+msgstr "Códigos de recuperação exibidos"
+
+#: lib/Controllers/AuthenticatorController.php:381
+#: lib/Services/AuthenticatorService.php:219
+msgid "Não há códigos de recuperação disponíveis"
+msgstr "Não há códigos de recuperação disponíveis"
+
+#: lib/Controllers/AuthenticatorLoginController.php:99
+#: lib/Controllers/AuthenticatorLoginController.php:105
+msgid "Aviso de Expiração"
+msgstr "Aviso de Expiração"
+
+#: lib/Controllers/AuthenticatorLoginController.php:100
+#, php-format
+msgid "O código 2FA terá de ser reposto dentro de %d dias"
+msgstr "O código 2FA terá de ser reposto dentro de %d dias"
+
+#: lib/Controllers/AuthenticatorLoginController.php:106
+msgid "O código 2FA está expirado. É necessário redefini-lo no separador das preferências"
+msgstr "O código 2FA está expirado. É necessário redefini-lo no separador das preferências"
+
+#: lib/Controllers/PreferencesController.php:154
+msgid "Segurança"
+msgstr "Segurança"
+
+#: themes/material-blue/views/login/index.inc:17
+#: themes/material-blue/views/userpreferences/preferences-security.inc:26
+msgid "Autenticação de dois factores"
+msgstr "Autenticação de dois factores"
+
+#: themes/material-blue/views/login/index.inc:23
+msgid "Introduza o código"
+msgstr "Introduza o código"
+
+#: themes/material-blue/views/login/index.inc:28
+msgid "Esqueci-me do meu código"
+msgstr "Esqueci-me do meu código"
+
+#: themes/material-blue/views/login/index.inc:44
+msgid "Voltar para iniciar sessão"
+msgstr "Voltar para iniciar sessão"
+
+#: themes/material-blue/views/login/index.inc:46
+msgid "Voltar"
+msgstr "Voltar"
+
+#: themes/material-blue/views/login/index.inc:50
+msgid "Iniciar sessão"
+msgstr "Iniciar sessão"
+
+#: themes/material-blue/views/login/index.inc:52
+msgid "Solicitação"
+msgstr "Solicitação"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:14
+msgid "Autenticação"
+msgstr "Autenticação"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:31
+msgid ""
+"Permite a autenticação dos dois factores que requerem a introdução de um símbolo que é "
+"gerado por uma aplicação como o Google Authenticator."
+msgstr ""
+"Permite a autenticação dos dois factores que requerem a introdução de um símbolo que é "
+"gerado por uma aplicação como o Google Authenticator."
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:35
+msgid "Por favor, digitalizar o código QR fornecido e depois introduzir a chave de 6 dígitos."
+msgstr "Por favor, digitalizar o código QR fornecido e depois introduzir a chave de 6 dígitos."
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:44
+msgid "Habilitado"
+msgstr "Habilitado"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:56
+msgid "Erro ao obter o código QR. Por favor, tente novamente"
+msgstr "Erro ao obter o código QR. Por favor, tente novamente"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:66
+msgid "Código"
+msgstr "Código"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:71
+msgid ""
+Uma vez ativado, só será possível iniciar sessão utilizando o gerador de códigos".
+"dispositivo ligado".
+msgstr ""
+Uma vez ativado, só será possível iniciar sessão utilizando o gerador de códigos".
+"dispositivo ligado".
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:77
+msgid "Dias de expiração"
+msgstr "Dias de expiração"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:84
+msgid "Dias"
+msgstr "Dias"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:92
+msgid "Recuperar Códigos"
+msgstr "Recovery Códigos"
+
+#: themes/material-blue/views/userpreferences/preferences-security.inc:94
+msgid "Visualização de códigos"
+msgstr "Visualização de códigos"

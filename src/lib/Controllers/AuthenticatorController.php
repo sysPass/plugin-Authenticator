@@ -103,14 +103,14 @@ final class AuthenticatorController extends SimpleControllerBase
             if ($this->configData->isDemoEnabled()) {
                 return $this->returnJsonResponse(
                     JsonResponse::JSON_WARNING,
-                    _t('authenticator', 'Ey, this is a DEMO!!')
+                    _t('authenticator', 'Ei, isso é uma demonstração!!')
                 );
             }
 
             if ($this->trackService->checkTracking($this->trackRequest)) {
                 $this->addTracking();
 
-                throw new AuthenticatorException(__u('Attempts exceeded'));
+                throw new AuthenticatorException(__u('Tentativas excedentes'));
             }
 
             if ($this->checkRecoveryCode($pin, $authenticatorData)
@@ -123,7 +123,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_ERROR,
-                _t('authenticator', 'Wrong code')
+                _t('authenticator', 'Código Inválido')
             );
         } catch (AuthenticatorException $e) {
             return $this->returnJsonResponse(
@@ -137,7 +137,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_ERROR,
-                __u('Internal error'),
+                __u('Error Interno'),
                 [__u($e->getMessage())]
             );
         }
@@ -169,7 +169,7 @@ final class AuthenticatorController extends SimpleControllerBase
         ) {
             $this->eventDispatcher->notifyEvent('authenticator.use.recoverycode',
                 new Event($this, EventMessage::factory()
-                    ->addDescription(_t('authenticator', 'Recovery code used')))
+                    ->addDescription(_t('authenticator', 'Use o código de recuperação')))
             );
 
             return true;
@@ -229,7 +229,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             $this->eventDispatcher->notifyEvent('authenticator.edit.enable',
                 new Event($this, EventMessage::factory()
-                    ->addDescription(_t('authenticator', '2FA Enabled'))
+                    ->addDescription(_t('authenticator', 'Habilitado 2FA'))
                     ->addDetail(__('User'), $this->userData->getLogin())
                     ->addExtra('userId', $this->userData->getId())
                     ->addExtra('expireDays', $authenticatorData->getExpireDays())
@@ -238,7 +238,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_SUCCESS,
-                _t('authenticator', '2FA Enabled')
+                _t('authenticator', 'Habilitado 2FA')
             );
         }
 
@@ -249,7 +249,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             $this->eventDispatcher->notifyEvent('authenticator.edit.disable',
                 new Event($this, EventMessage::factory()
-                    ->addDescription(_t('authenticator', '2FA Disabled'))
+                    ->addDescription(_t('authenticator', 'Desabilitado 2FA'))
                     ->addDetail(__('User'), $this->userData->getLogin())
                     ->addExtra('userId', $this->userData->getId())
                 )
@@ -257,7 +257,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_SUCCESS,
-                _t('authenticator', '2FA Disabled')
+                _t('authenticator', 'Desabilitado 2FA')
             );
         }
 
@@ -282,7 +282,7 @@ final class AuthenticatorController extends SimpleControllerBase
                 $this->pluginContext->setTwoFApass(false);
                 $this->session->setAuthCompleted(false);
 
-                throw new AuthenticatorException(__u('User not found'));
+                throw new AuthenticatorException(__u('Usuário não encontrado'));
             }
 
             if ($codeReset
@@ -295,7 +295,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
                 return $this->returnJsonResponse(
                     JsonResponse::JSON_SUCCESS,
-                    _t('authenticator', 'Recovery email has been sent')
+                    _t('authenticator', 'E-mail de recuperação foi enviado')
                 );
             }
 
@@ -311,7 +311,7 @@ final class AuthenticatorController extends SimpleControllerBase
                 return $this->returnJsonResponseData(
                     ['url' => $url],
                     JsonResponse::JSON_SUCCESS,
-                    _t('authenticator', 'Correct code')
+                    _t('authenticator', 'Código correto')
                 );
             }
 
@@ -319,7 +319,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_ERROR,
-                _t('authenticator', 'Wrong code')
+                _t('authenticator', 'Código Inválido')
             );
         } catch (AuthenticatorException $e) {
             return $this->returnJsonResponse(
@@ -333,7 +333,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_ERROR,
-                __u('Internal error')
+                __u('Error Interno')
             );
         }
     }
@@ -353,19 +353,19 @@ final class AuthenticatorController extends SimpleControllerBase
                 $code = $this->authenticatorService->pickRecoveryCode($authenticatorData);
 
                 $message = new MailMessage();
-                $message->setTitle(_t('authenticator', '2FA Code Recovery'));
-                $message->addDescription(_t('authenticator', 'A 2FA recovery code has been requested.'));
+                $message->setTitle(_t('authenticator', 'Código de Recuperação 2FA'));
+                $message->addDescription(_t('authenticator', 'Foi solicitado um código de recuperação 2FA'));
                 $message->addDescriptionLine();
-                $message->addDescription(sprintf(_t('authenticator', 'The recovery code is: %s'), $code));
+                $message->addDescription(sprintf(_t('authenticator', 'O código de recuperação é: %s'), $code));
 
                 $this->dic->get(MailService::class)
-                    ->send(_t('authenticator', '2FA Code Recovery'),
+                    ->send(_t('authenticator', 'Código de Recuperação 2FA'),
                         $this->userData->getEmail(),
                         $message);
 
                 $this->eventDispatcher->notifyEvent('authenticator.send.recoverycode',
                     new Event($this, EventMessage::factory()
-                        ->addDescription(_t('authenticator', '2FA Code Recovery'))
+                        ->addDescription(_t('authenticator', 'Código de Recuperação 2FA'))
                         ->addDetail(__('User'), $this->userData->getLogin())
                         ->addExtra('userId', $this->userData->getId())
                     )
@@ -382,7 +382,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             $this->eventDispatcher->notifyEvent('exception', new Event($e));
 
-            throw new AuthenticatorException(__u('Error while sending the email'));
+            throw new AuthenticatorException(__u('Erro enquanto enviava e-mail'));
         }
     }
 
@@ -395,7 +395,7 @@ final class AuthenticatorController extends SimpleControllerBase
             $authenticatorData = $this->plugin->getData();
 
             if ($authenticatorData === null) {
-                throw new AuthenticatorException(__u('User not found'));
+                throw new AuthenticatorException(__u('Usuário não encontrado'));
             }
 
             $codes = $authenticatorData->getRecoveryCodes();
@@ -403,7 +403,7 @@ final class AuthenticatorController extends SimpleControllerBase
             if (count($codes) > 0) {
                 $this->eventDispatcher->notifyEvent('authenticator.show.recoverycode',
                     new Event($this, EventMessage::factory()
-                        ->addDescription(_t('authenticator', 'Recovery codes displayed'))
+                        ->addDescription(_t('authenticator', 'Códigos de recuperação exibidos'))
                         ->addDetail(__('User'), $this->userData->getLogin())
                         ->addExtra('userId', $this->userData->getId())
                     )
@@ -413,7 +413,7 @@ final class AuthenticatorController extends SimpleControllerBase
             } else {
                 return $this->returnJsonResponse(
                     JsonResponse::JSON_ERROR,
-                    _t('authenticator', 'There aren\'t any recovery codes available')
+                    _t('authenticator', 'Não há códigos de recuperação disponíveis')
                 );
             }
         } catch (Exception $e) {
@@ -423,7 +423,7 @@ final class AuthenticatorController extends SimpleControllerBase
 
             return $this->returnJsonResponse(
                 JsonResponse::JSON_ERROR,
-                __u('Internal error')
+                __u('Erro Interno')
             );
         }
     }
