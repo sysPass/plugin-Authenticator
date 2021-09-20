@@ -146,11 +146,9 @@ msgid "Código"
 msgstr "Código"
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:71
-msgid ""
-Uma vez ativado, só será possível iniciar sessão utilizando o gerador de códigos".
+msgid "Uma vez ativado, só será possível iniciar sessão utilizando o gerador de códigos".
 "dispositivo ligado".
-msgstr ""
-Uma vez ativado, só será possível iniciar sessão utilizando o gerador de códigos".
+msgstr "Uma vez ativado, só será possível iniciar sessão utilizando o gerador de códigos".
 "dispositivo ligado".
 
 #: themes/material-blue/views/userpreferences/preferences-security.inc:77
