@@ -14,6 +14,22 @@ Please, select the correct branch in order to download a sysPass compatible vers
 
 ---
 
+### v3.2 Installation
+* If you are running a **non-Docker** based instance:
+
+```composer require syspass/plugin-authenticator:^v2.2```
+
+* If you are running a **Docker** based instance, set `syspass/plugin-authenticator:^v2.2` value within an environment variable called `COMPOSER_EXTENSIONS`.
+
+
+### v3.0 - v3.1 Installation
+* If you are running a **non-Docker** based instance:
+
+```composer require syspass/plugin-authenticator:^v2.1```
+
+* If you are running a **Docker** based instance, set `syspass/plugin-authenticator:^v2.1` value within an environment variable called `COMPOSER_EXTENSIONS`.
+
+
 ### v2 Installation
 
 As told above, this version is only compatible with **sysPass v3** and it needs to be installed through **composer**.
