@@ -128,7 +128,7 @@ final class PreferencesController
             if (!$authenticatorData->isTwofaEnabled()) {
                 $authenticatorData->setIV(AuthenticatorService::makeInitializationKey());
 
-                $qrCode = $this->authenticatorService->getQrCodeFromServer($userData->getLogin(), $authenticatorData->getIV());
+                $qrCode = $this->authenticatorService->getUserQRUrl($userData->getLogin(), $authenticatorData->getIV());
             }
 
             $template->assign('qrCode', $qrCode);
